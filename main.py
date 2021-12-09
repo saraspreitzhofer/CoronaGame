@@ -53,14 +53,15 @@ class Game:
             self.jump()
             #pygame.time.delay(50)  # slows down everything!
         self.virus.x -= VELOCITY_VIRUS  # move image VELOCITY_VIRUS pixel to the left in each frame
-
+        if self.runner.colliderect(self.virus): # detect collisions of two rectangles
+            print("You are infected!")
+            self.VIRUS.fill(TRANSPARENT)    # make virus transparent after collision
 
     def draw(self): # game loop - draw
         self.WIN.fill(WHITE)  # RGB color for the window background, defined as constant
         # coordinate system: (0,0) is top left
         self.WIN.blit(self.RUNNER, (self.runner.x, self.runner.y))  # draw surface (pictures, text, ...) on the screen
         self.WIN.blit(self.VIRUS, (self.virus.x, self.virus.y))
-
 
     def show_start_screen(self):    # game splash / start screen
         pass
