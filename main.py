@@ -32,6 +32,7 @@ def main():  # code that handles main game loop in pygame
     runner = pygame.Rect(10, 370, RUNNER_WIDTH, RUNNER_HEIGHT)
     virus = pygame.Rect(810, 410, VIRUS_WIDTH, VIRUS_HEIGHT)
     clock = pygame.time.Clock()
+    print("hello")
     run = True
 
     while run:  # game loop: open & close the window
