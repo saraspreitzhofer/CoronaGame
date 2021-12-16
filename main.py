@@ -3,7 +3,7 @@ import os  # to define path to the images
 from settings import *
 
 
-class Game: # test
+class Game: # test testula
     def __init__(self): # initialize game window etc
         pygame.init()
         pygame.mixer.init()
