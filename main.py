@@ -10,6 +10,7 @@ class Game:
         self.WIN = pygame.display.set_mode((WIDTH, HEIGHT))  # make new window of defined width & height
         pygame.display.set_caption(TITLE)  # window title
         self.clock = pygame.time.Clock()
+        #all_sprites = pygame.sprite.Group()  # creates new empty group for all sprites
         self.running = True
         self.playing = True
         self.jumping = False
