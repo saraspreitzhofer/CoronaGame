@@ -1,5 +1,7 @@
 import pygame
 import os  # to define path to the images
+
+from Superspreader import Superspreader
 from settings import *
 from Runner import Runner  # from filename import className
 from Virus import Virus  # from filename import className
@@ -16,11 +18,15 @@ class Game:
         self.playing = True
         self.jumping = False
         self.runner = Runner()
-        self.virus = Virus()
         self.all_sprites = pygame.sprite.Group()  # creates new empty group for all sprites
-        self.all_sprites.add(self.virus) # add virus to sprites group
+        #self.all_sprites.add(self.virus) # add virus to sprites group
         self.all_sprites.add(self.runner)
         self.virus_frequency = 10
+        self.superspreader = Superspreader()
+        self.virus = self.superspreader.produce()
+        self.all_sprites.add(self.virus)
+
+
 
 
         # self.runner = pygame.Rect(10, 370, RUNNER_WIDTH, RUNNER_HEIGHT)
@@ -41,8 +47,8 @@ class Game:
             self.draw()
 
     def update(self):  # game loop - update
-        # self.all_sprites.update()
-        # ....
+        # TODO Ula: zaehlvariable für superspreader.produce(...)
+        self.all_sprites.update()
         pygame.display.update()  # update changes
 
     def events(self):  # game loop - events
@@ -61,7 +67,6 @@ class Game:
         if self.jumping:
             self.runner.jump()
             # pygame.time.delay(50)  # slows down everything!
-        self.virus.move_virus() #TODO: move to update?
         # rotate virus
         # self.virus.rotation_angle += ROTATEBY_VIRUS
         # pygame.time.delay(250)  # slows down everything!
@@ -69,6 +74,7 @@ class Game:
         # print("virus rotation angle: " + str(self.virus.rotation_angle))
         # self.virus.image, self.virus.rect = self.virus.roll_through_screen() #TODO: rotation doesn't work yet
         # detect collision
+        # TODO Merve: improve collision
         if self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
             print("You are infected!")
             self.virus.image.fill(TRANSPARENT)  # make virus transparent after collision
