@@ -13,7 +13,8 @@ class Virus(GameObject):  # (Vererbung)
         self.VELOCITY_VIRUS = 5
         self.rotation_angle = 0
 
-    def rotate(self, surface, angle):
-        rotated_surface = pygame.transform.rotozoom(surface, angle, 1)
-        rotated_rect = pygame.Rect(self.rect.x, self.rect.y, VIRUS_WIDTH, VIRUS_HEIGHT)
+    def roll_through_screen(self):
+        # self.rect.x -= self.VELOCITY_VIRUS  # move image VELOCITY_VIRUS pixel to the left in each frame
+        rotated_surface = pygame.transform.rotozoom(self.image, self.rotation_angle, 1)
+        rotated_rect = self.image.get_rect(center=(self.rect.x, self.rect.y)) # pygame.Rect(self.rect.x, self.rect.y, VIRUS_WIDTH, VIRUS_HEIGHT)
         return rotated_surface, rotated_rect

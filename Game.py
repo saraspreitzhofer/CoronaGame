@@ -59,12 +59,12 @@ class Game:
             self.runner.jump()
             # pygame.time.delay(50)  # slows down everything!
         self.virus.rect.x -= self.virus.VELOCITY_VIRUS  # move image VELOCITY_VIRUS pixel to the left in each frame
-        # rotate virus
-        self.virus.rotation_angle += 10
+        # rotate virus -
+        # self.virus.rotation_angle += ROTATEBY_VIRUS
         # pygame.time.delay(250)  # slows down everything!
         print("virus center: " + str(self.virus.rect.x) + ", " + str(self.virus.rect.y))
-        print("virus rotation angle: " + str(self.virus.rotation_angle))
-        # self.virus.image, self.virus.rect = self.virus.rotate(self.virus.image, self.virus.rotation_angle) #TODO: rotation doesn't work yet
+        # print("virus rotation angle: " + str(self.virus.rotation_angle))
+        # self.virus.image, self.virus.rect = self.virus.roll_through_screen() #TODO: rotation doesn't work yet
         # detect collision
         if self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
             print("You are infected!")
