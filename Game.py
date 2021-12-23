@@ -20,6 +20,8 @@ class Game:
         self.all_sprites = pygame.sprite.Group()  # creates new empty group for all sprites
         self.all_sprites.add(self.virus) # add virus to sprites group
         self.all_sprites.add(self.runner)
+        self.virus_frequency = 10
+
 
         # self.runner = pygame.Rect(10, 370, RUNNER_WIDTH, RUNNER_HEIGHT)
         # self.RUNNER_IMAGE = pygame.image.load(os.path.join('assets', "runner.png"))
@@ -40,6 +42,7 @@ class Game:
 
     def update(self):  # game loop - update
         # self.all_sprites.update()
+        # ....
         pygame.display.update()  # update changes
 
     def events(self):  # game loop - events
@@ -58,8 +61,8 @@ class Game:
         if self.jumping:
             self.runner.jump()
             # pygame.time.delay(50)  # slows down everything!
-        self.virus.rect.x -= self.virus.VELOCITY_VIRUS  # move image VELOCITY_VIRUS pixel to the left in each frame
-        # rotate virus -
+        self.virus.move_virus() #TODO: move to update?
+        # rotate virus
         # self.virus.rotation_angle += ROTATEBY_VIRUS
         # pygame.time.delay(250)  # slows down everything!
         print("virus center: " + str(self.virus.rect.x) + ", " + str(self.virus.rect.y))
