@@ -11,10 +11,11 @@ class Runner(pygame.sprite.Sprite):  # Runner is a pygame Sprite object (Vererbu
                                             (RUNNER_WIDTH, RUNNER_HEIGHT))  # resize image
         self.rect = pygame.Rect(10, 370, RUNNER_WIDTH, RUNNER_HEIGHT)
         self.VELOCITY_JUMP = 15
+        self.jumping = False    # jetzt hier deklariert, damit ist der endlos jump gelöst
 
     def jump(self):
         self.rect.y -= self.VELOCITY_JUMP
         self.VELOCITY_JUMP -= 1
         if self.VELOCITY_JUMP < -15:
-            Game.jumping = False    # funktioniert noch nicht -> endlos jump
+            self.jumping = False
             self.VELOCITY_JUMP = 15

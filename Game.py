@@ -16,7 +16,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         self.playing = True
-        self.jumping = False
+        # self.jumping = False  # ist jetzt in Klasse Runner
         self.runner = Runner()
         self.all_sprites = pygame.sprite.Group()  # creates new empty group for all sprites
         #self.all_sprites.add(self.virus) # add virus to sprites group
@@ -62,9 +62,9 @@ class Game:
             # if self.jumping:
             #    self.jump()
         user_input = pygame.key.get_pressed()  # list of currently pressed key(s)
-        if self.jumping is False and user_input[pygame.K_SPACE]:
-            self.jumping = True
-        if self.jumping:
+        if self.runner.jumping is False and user_input[pygame.K_SPACE]:
+            self.runner.jumping = True
+        if self.runner.jumping:
             self.runner.jump()
             # pygame.time.delay(50)  # slows down everything!
         # rotate virus
