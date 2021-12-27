@@ -5,6 +5,7 @@ from Superspreader import Superspreader
 from settings import *
 from Runner import Runner  # from filename import className
 from Virus import Virus  # from filename import className
+from Health import Health1, Health2, Health3
 
 
 class Game:
@@ -17,24 +18,25 @@ class Game:
         self.running = True
         self.playing = True
         # self.jumping = False  # ist jetzt in Klasse Runner
-        self.runner = Runner()
         self.all_sprites = pygame.sprite.Group()  # creates new empty group for all sprites
-        #self.all_sprites.add(self.virus) # add virus to sprites group
+
+        # create runner and add it to sprites group
+        self.runner = Runner()
         self.all_sprites.add(self.runner)
+
+        # create viruses and add them to sprites group
         self.virus_frequency = 10
         self.superspreader = Superspreader()
         self.virus = self.superspreader.produce()
-        self.all_sprites.add(self.virus)
+        self.all_sprites.add(self.virus)  # add virus to sprites group
 
-
-
-
-        # self.runner = pygame.Rect(10, 370, RUNNER_WIDTH, RUNNER_HEIGHT)
-        # self.RUNNER_IMAGE = pygame.image.load(os.path.join('assets', "runner.png"))
-        # self.RUNNER = pygame.transform.scale(self.RUNNER_IMAGE, (RUNNER_WIDTH, RUNNER_HEIGHT))  # resize image
-        # self.virus = pygame.Rect(810, 410, VIRUS_WIDTH, VIRUS_HEIGHT)
-        # self.VIRUS_IMAGE = pygame.image.load(os.path.join('assets', "virus.png"))
-        # self.VIRUS = pygame.transform.scale(self.VIRUS_IMAGE, (VIRUS_WIDTH, VIRUS_HEIGHT))  # resize image
+        # create hearts and add them to sprites group
+        self.health1 = Health1()
+        self.health2 = Health2()
+        self.health3 = Health3()
+        self.all_sprites.add(self.health1)
+        self.all_sprites.add(self.health2)
+        self.all_sprites.add(self.health3)
 
     def new(self):  # start a new game
         self.run()
@@ -77,7 +79,7 @@ class Game:
         # TODO Merve: improve collision
         if self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
             print("You are infected!")
-            self.virus.image.fill(TRANSPARENT)  # make virus transparent after collision
+            self.virus.image.fill(TRANSPARENT)  # make virus transparent after collision TODO Merve: kill object
 
     def draw(self):  # game loop - draw
         self.WIN.fill(WHITE)  # RGB color for the window background, defined as constant
