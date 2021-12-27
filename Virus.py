@@ -10,7 +10,7 @@ class Virus(GameObject):  # (Vererbung)
         super().__init__()  # necessary, but why? from clear code tutorial https://www.youtube.com/watch?v=hDu8mcAlY4E
         self.image = pygame.transform.scale(pygame.image.load(os.path.join('assets', "virus.png")),
                                             (VIRUS_WIDTH, VIRUS_HEIGHT))  # resize image
-        self.rect = pygame.Rect(810, 410, VIRUS_WIDTH, VIRUS_HEIGHT)  # position - shorter with surface.get_rect()
+        self.rect = pygame.Rect(WIDTH-MARGIN-VIRUS_WIDTH, HEIGHT-MARGIN-VIRUS_HEIGHT, VIRUS_WIDTH, VIRUS_HEIGHT)  # position - shorter with surface.get_rect()
         self.VELOCITY_VIRUS = 5
         self.FREQUENCY_VIRUS = 10  # noch ausprobieren, was passt
         self.rotation_angle = 0
