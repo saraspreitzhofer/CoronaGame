@@ -19,18 +19,18 @@ class Game:
         self.playing = True
         # self.jumping = False  # ist jetzt in Klasse Runner
         self.all_sprites = pygame.sprite.Group()  # creates new empty group for all sprites
+        self.virus_group = pygame.sprite.Group()
 
         # create runner and add it to sprites group
         self.runner = Runner()
         self.all_sprites.add(self.runner)
 
-        # create viruses and add them to sprites group
+        # all about virus creation
         self.frame_counter = 0 # use for intervals when producing new virus
         self.virus_counter = 0 # TODO: maybe use later to increase virusproduction
-        self.virus_frequency = 100
+        self.virus_frequency = 120
         self.superspreader = Superspreader()
-        self.virus_exists = False # tmp TODO: remove when not needed
-
+        self.virus_first = None # first virus
 
         # create hearts and add them to sprites group
         self.health1 = Health1()
@@ -51,16 +51,15 @@ class Game:
             self.draw()
 
     def update(self):  # game loop - update
-        # TODO Ula: zaehlvariable für superspreader.produce(...)
-        self.frame_counter += 1
         if self.frame_counter % self.virus_frequency == 0:
-            self.virus = self.superspreader.produce_virus(5)  # produce virus with velocity 5
-            self.all_sprites.add(self.virus)  # add virus to sprites group
+            virus = self.superspreader.produce_virus(5)  # produce virus with velocity 5
+            self.all_sprites.add(virus)  # add virus to sprites group
+            self.virus_group.add(virus)
             self.frame_counter = 0
             self.virus_counter += 1
-            self.virus_exists = True
         self.all_sprites.update()
         pygame.display.update()  # update changes
+        self.frame_counter += 1
 
     def events(self):  # game loop - events
         for event in pygame.event.get():  # loop through list of all different events
@@ -78,7 +77,7 @@ class Game:
         if self.runner.jumping:
             self.runner.jump()
             # pygame.time.delay(50)  # slows down everything!
-        if self.virus_exists:
+        try:
             # rotate virus
             # self.virus.rotation_angle += ROTATEBY_VIRUS
             # pygame.time.delay(250)  # slows down everything!
@@ -87,9 +86,11 @@ class Game:
             # self.virus.image, self.virus.rect = self.virus.roll_through_screen() #TODO Ula: rotation doesn't work yet
             # detect collision
             # TODO Merve: improve collision
-            if self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
+            if pygame.sprite.spritecollide(self.runner, self.virus_group, True): # self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
                 print("You are infected!")
-                self.virus.image.fill(TRANSPARENT)  # make virus transparent after collision TODO Merve: kill object
+                #self.virus.image.fill(TRANSPARENT)  # make virus transparent after collision (causes error)
+        except AttributeError:
+            print("AttributeError. Maybe no virus exists")
 
     def draw(self):  # game loop - draw
         self.WIN.fill(WHITE)  # RGB color for the window background, defined as constant
