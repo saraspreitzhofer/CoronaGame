@@ -27,7 +27,7 @@ class Game:
         # create viruses and add them to sprites group
         self.virus_frequency = 10
         self.superspreader = Superspreader()
-        self.virus = self.superspreader.produce()
+        self.virus = self.superspreader.produce(5, 12)
         self.all_sprites.add(self.virus)  # add virus to sprites group
 
         # create hearts and add them to sprites group
