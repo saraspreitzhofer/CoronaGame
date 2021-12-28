@@ -5,13 +5,13 @@ from GameObject import GameObject  # from filename import className
 
 
 class Virus(GameObject):  # (Vererbung)
-    def __init__(self, frequency, velocity):  # runs whenever a new object of this type is made
+    def __init__(self, velocity):  # runs whenever a new object of this type is made
         super().__init__()  # necessary, but why? from clear code tutorial https://www.youtube.com/watch?v=hDu8mcAlY4E
         self.image = pygame.transform.scale(pygame.image.load(os.path.join('assets', "virus.png")),
                                             (VIRUS_WIDTH, VIRUS_HEIGHT))  # resize image
         self.rect = pygame.Rect(WIDTH-MARGIN-VIRUS_WIDTH, HEIGHT-MARGIN-VIRUS_HEIGHT, VIRUS_WIDTH, VIRUS_HEIGHT)  # position - shorter with surface.get_rect()
         self.VELOCITY_VIRUS = velocity # 5
-        self.FREQUENCY_VIRUS = frequency  # 10 noch ausprobieren, was passt
+        self.FREQUENCY_VIRUS = 10  # 10 noch ausprobieren, was passt TODO: ist auch in game definiert!
         self.rotation_angle = 0
 
     def roll_through_screen(self):

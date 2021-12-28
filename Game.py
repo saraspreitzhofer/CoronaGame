@@ -27,7 +27,7 @@ class Game:
         # create viruses and add them to sprites group
         self.virus_frequency = 10
         self.superspreader = Superspreader()
-        self.virus = self.superspreader.produce(5, 12)
+        self.virus = self.superspreader.produce_virus(5) # TODO: temp - remove
         self.all_sprites.add(self.virus)  # add virus to sprites group
 
         # create hearts and add them to sprites group
@@ -50,6 +50,7 @@ class Game:
 
     def update(self):  # game loop - update
         # TODO Ula: zaehlvariable für superspreader.produce(...)
+
         self.all_sprites.update()
         pygame.display.update()  # update changes
 
