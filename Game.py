@@ -25,10 +25,12 @@ class Game:
         self.all_sprites.add(self.runner)
 
         # create viruses and add them to sprites group
-        self.virus_frequency = 10
+        self.frame_counter = 0 # use for intervals when producing new virus
+        self.virus_counter = 0 # TODO: maybe use later to increase virusproduction
+        self.virus_frequency = 100
         self.superspreader = Superspreader()
-        self.virus = self.superspreader.produce_virus(5) # TODO: temp - remove
-        self.all_sprites.add(self.virus)  # add virus to sprites group
+        self.virus_exists = False # tmp TODO: remove when not needed
+
 
         # create hearts and add them to sprites group
         self.health1 = Health1()
@@ -50,7 +52,13 @@ class Game:
 
     def update(self):  # game loop - update
         # TODO Ula: zaehlvariable für superspreader.produce(...)
-
+        self.frame_counter += 1
+        if self.frame_counter % self.virus_frequency == 0:
+            self.virus = self.superspreader.produce_virus(5)  # produce virus with velocity 5
+            self.all_sprites.add(self.virus)  # add virus to sprites group
+            self.frame_counter = 0
+            self.virus_counter += 1
+            self.virus_exists = True
         self.all_sprites.update()
         pygame.display.update()  # update changes
 
@@ -70,17 +78,18 @@ class Game:
         if self.runner.jumping:
             self.runner.jump()
             # pygame.time.delay(50)  # slows down everything!
-        # rotate virus
-        # self.virus.rotation_angle += ROTATEBY_VIRUS
-        # pygame.time.delay(250)  # slows down everything!
-        print("virus center: " + str(self.virus.rect.x) + ", " + str(self.virus.rect.y))
-        # print("virus rotation angle: " + str(self.virus.rotation_angle))
-        # self.virus.image, self.virus.rect = self.virus.roll_through_screen() #TODO: rotation doesn't work yet
-        # detect collision
-        # TODO Merve: improve collision
-        if self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
-            print("You are infected!")
-            self.virus.image.fill(TRANSPARENT)  # make virus transparent after collision TODO Merve: kill object
+        if self.virus_exists:
+            # rotate virus
+            # self.virus.rotation_angle += ROTATEBY_VIRUS
+            # pygame.time.delay(250)  # slows down everything!
+            # print("virus center: " + str(self.virus.rect.x) + ", " + str(self.virus.rect.y))
+            # print("virus rotation angle: " + str(self.virus.rotation_angle))
+            # self.virus.image, self.virus.rect = self.virus.roll_through_screen() #TODO Ula: rotation doesn't work yet
+            # detect collision
+            # TODO Merve: improve collision
+            if self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
+                print("You are infected!")
+                self.virus.image.fill(TRANSPARENT)  # make virus transparent after collision TODO Merve: kill object
 
     def draw(self):  # game loop - draw
         self.WIN.fill(WHITE)  # RGB color for the window background, defined as constant

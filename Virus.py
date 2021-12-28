@@ -11,7 +11,6 @@ class Virus(GameObject):  # (Vererbung)
                                             (VIRUS_WIDTH, VIRUS_HEIGHT))  # resize image
         self.rect = pygame.Rect(WIDTH-MARGIN-VIRUS_WIDTH, HEIGHT-MARGIN-VIRUS_HEIGHT, VIRUS_WIDTH, VIRUS_HEIGHT)  # position - shorter with surface.get_rect()
         self.VELOCITY_VIRUS = velocity # 5
-        self.FREQUENCY_VIRUS = 10  # 10 noch ausprobieren, was passt TODO: ist auch in game definiert!
         self.rotation_angle = 0
 
     def roll_through_screen(self):
@@ -22,5 +21,4 @@ class Virus(GameObject):  # (Vererbung)
         return rotated_surface, rotated_rect
 
     def update(self):
-        print("update virus")
         self.rect.x -= self.VELOCITY_VIRUS  # move image VELOCITY_VIRUS pixel to the left in each frame
