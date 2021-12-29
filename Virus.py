@@ -20,14 +20,13 @@ class Virus(GameObject):  # (Vererbung)
 
 
     def roll_through_screen(self):
-        # self.rect.x -= self.VELOCITY_VIRUS  # move image VELOCITY_VIRUS pixel to the left in each frame
+        self.rotation_angle += ROTATEBY_VIRUS  # aktualisiert rotation angle von einzelnen virus sprites
+        self.x -= self.VELOCITY_VIRUS  # move image VELOCITY_VIRUS pixel to the left in each frame
         rotated_surface = pygame.transform.rotozoom(self.image_original, self.rotation_angle, 1)
         rotated_rect = rotated_surface.get_rect(
             center=(self.x, 450))  # use freshly set new coordiates
         return rotated_surface, rotated_rect
 
     def update(self):
-        self.rotation_angle += ROTATEBY_VIRUS  # aktualisiert rotation angle von einzelnen virus sprites
-        self.x -= self.VELOCITY_VIRUS  # move image VELOCITY_VIRUS pixel to the left in each frame
         self.image, self.rect = self.roll_through_screen()
 
