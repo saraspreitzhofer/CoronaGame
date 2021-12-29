@@ -1,7 +1,10 @@
 TITLE = "Corona Game"
+TITLE_START = "Start Menu"
 WIDTH, HEIGHT = 900, 500
 MARGIN = 15
 WHITE = (255, 255, 255)
+GREY = (200, 200, 200)
+BLACK = (0, 0, 0)
 TRANSPARENT = (0, 0, 0, 0)
 FPS = 60  # frames per second
 RUNNER_WIDTH, RUNNER_HEIGHT = 120, 120

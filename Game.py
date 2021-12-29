@@ -104,3 +104,52 @@ class Game:
 
     def show_go_screen(self):  # game over / continue
         pass
+
+
+class StartMenu:
+    def __init__(self):  # initialize game window etc
+        pygame.init()
+        pygame.mixer.init()
+        self.WIN = pygame.display.set_mode((WIDTH, HEIGHT))  # make new window of defined width & height
+        pygame.display.set_caption(TITLE_START)  # window title
+        self.running = True
+        self.clock = pygame.time.Clock()
+        self.font_small = pygame.font.Font(None, 60)
+        self.font_big = pygame.font.Font(None, 100)
+        self.click = False
+
+    def draw_text(self, text, font, color, surface, x, y):
+        text_obj = font.render(text, 1, color)
+        text_rect = text_obj.get_rect()
+        text_rect.topleft = (x, y)
+        surface.blit(text_obj, text_rect)
+
+    def display_main_menu(self):
+        while self.running:
+            self.WIN.fill(WHITE)
+            mx, my = pygame.mouse.get_pos()
+            start_button = pygame.Rect(280, 230, 150, 80)
+            pygame.draw.rect(self.WIN, GREY, start_button)
+            self.draw_text("Play", self.font_small, BLACK, self.WIN, 300, 250)
+            self.draw_text("Corona Game", self.font_big, BLACK, self.WIN, 200, 100)
+
+            if start_button.collidepoint((mx, my)):
+                if self.click:
+                    while g.running:
+                        g.new()
+
+            self.click = False
+            pygame.display.update()
+            self.clock.tick(FPS)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        self.click = True
+
+
+g = Game()
+s = StartMenu()
+while s.running:
+    s.display_main_menu()
