@@ -53,7 +53,7 @@ class Game:
     def update(self):  # game loop - update
         # virus sprite production depending on number of frames passed
         if self.frame_counter % self.virus_frequency == 0:
-            virus = self.superspreader.produce_virus(5)  # produce virus with velocity 5
+            virus = self.superspreader.produce_virus(7)  # produce virus with velocity 5
             self.all_sprites.add(virus)  # add virus to sprites group
             self.virus_group.add(virus)
             self.frame_counter = 0
