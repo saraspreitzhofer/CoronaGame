@@ -80,10 +80,7 @@ class Game:
         # pygame.time.delay(400)  # slows down everything!
         try:
             # rotate virus
-            self.virus_group.rotation_angle += ROTATEBY_VIRUS
             # pygame.time.delay(250)  # slows down everything!
-            # print("virus rotation angle: " + str(self.virus.rotation_angle))
-            # self.virus.image, self.virus.rect = self.virus.roll_through_screen() #TODO Ula: rotation doesn't work yet
             # detect collision
             # TODO Merve: improve collision
             if pygame.sprite.spritecollide(self.runner, self.virus_group, True): # self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
