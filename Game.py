@@ -51,6 +51,7 @@ class Game:
             self.draw()
 
     def update(self):  # game loop - update
+        # virus sprite production depending on number of frames passed
         if self.frame_counter % self.virus_frequency == 0:
             virus = self.superspreader.produce_virus(5)  # produce virus with velocity 5
             self.all_sprites.add(virus)  # add virus to sprites group
@@ -59,7 +60,7 @@ class Game:
             self.virus_counter += 1
         self.all_sprites.update()
         pygame.display.update()  # update changes
-        self.frame_counter += 1
+        self.frame_counter += 1 # necessary for virus sprite production
 
     def events(self):  # game loop - events
         for event in pygame.event.get():  # loop through list of all different events
@@ -76,12 +77,11 @@ class Game:
             self.runner.jumping = True
         if self.runner.jumping:
             self.runner.jump()
-            # pygame.time.delay(50)  # slows down everything!
+        # pygame.time.delay(400)  # slows down everything!
         try:
             # rotate virus
-            # self.virus.rotation_angle += ROTATEBY_VIRUS
+            self.virus_group.rotation_angle += ROTATEBY_VIRUS
             # pygame.time.delay(250)  # slows down everything!
-            # print("virus center: " + str(self.virus.rect.x) + ", " + str(self.virus.rect.y))
             # print("virus rotation angle: " + str(self.virus.rotation_angle))
             # self.virus.image, self.virus.rect = self.virus.roll_through_screen() #TODO Ula: rotation doesn't work yet
             # detect collision
