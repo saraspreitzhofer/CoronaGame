@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 import os  # to define path to the images
 
 from Superspreader import Superspreader
@@ -6,10 +6,12 @@ from settings import *
 from Runner import Runner  # from filename import className
 from Virus import Virus  # from filename import className
 from Health import Health1, Health2, Health3
-
+FPS = 60
+FramePerSec =pygame.time.Clock()
 
 class Game:
     def __init__(self):  # initialize game window etc
+        self.game_over = None
         pygame.init()
         pygame.mixer.init()
         self.WIN = pygame.display.set_mode((WIDTH, HEIGHT))  # make new window of defined width & height
@@ -62,7 +64,8 @@ class Game:
         pygame.display.update()  # update changes
         self.frame_counter += 1 # necessary for virus sprite production
 
-    def events(self):  # game loop - events
+    def events(self): # game loop - events
+        self.game_over = False
         for event in pygame.event.get():  # loop through list of all different events
             if event.type == pygame.QUIT:
                 if self.playing:
@@ -83,8 +86,14 @@ class Game:
             # pygame.time.delay(250)  # slows down everything!
             # detect collision
             # TODO Merve: improve collision
-            if pygame.sprite.spritecollide(self.runner, self.virus_group, True): # self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
-                print("You are infected!")
+            if pygame.sprite.spritecollideany(self.runner, self.virus_group):
+                pygame.display.update()
+                for entity in self.all_sprites:
+                    entity.kill()
+
+                pygame.quit()
+                sys.exit()
+
                 #self.virus.image.fill(TRANSPARENT)  # make virus transparent after collision (causes error)
         except AttributeError:
             print("AttributeError. Maybe no virus exists")
@@ -104,6 +113,13 @@ class Game:
 
     def show_go_screen(self):  # game over / continue
         pass
+
+
+
+
+
+
+
 
 
 class StartMenu:
