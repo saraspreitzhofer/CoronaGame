@@ -81,25 +81,16 @@ class Game:
         if self.runner.jumping:
             self.runner.jump()
         # pygame.time.delay(400)  # slows down everything!
-        try:
-            # rotate virus
-            # pygame.time.delay(250)  # slows down everything!
-            # detect collision
-            # TODO Merve: improve collision
-            if pygame.sprite.spritecollide(self.runner, self.virus_group,
-                                           True):  # self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
-                print("You are infected!")
-                player = Runner()
-                player.numOfLives = -1
-                if player.numOfLives < 3:
-                    pygame.sprite.Sprite.kill(self.health3)
-
-                if player.numOfLives < 2:
-                    pygame.sprite.Sprite.kill(self.health2)
-
-                #self.virus.image.fill(TRANSPARENT)  # make virus transparent after collision (causes error)
-        except AttributeError:
-            print("AttributeError. Maybe no virus exists")
+        # detect collision
+        # TODO Merve: improve health decrease
+        if pygame.sprite.spritecollide(self.runner, self.virus_group,
+                                       True):  # self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
+            print("You are infected!")
+            self.runner.numOfLives = -1
+            if self.runner.numOfLives < 3:
+                pygame.sprite.Sprite.kill(self.health3)
+            elif self.runner.numOfLives < 2:
+                pygame.sprite.Sprite.kill(self.health2)
 
     def draw(self):  # game loop - draw
         self.WIN.fill(WHITE)  # RGB color for the window background, defined as constant
