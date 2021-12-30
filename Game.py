@@ -86,13 +86,16 @@ class Game:
             # pygame.time.delay(250)  # slows down everything!
             # detect collision
             # TODO Merve: improve collision
-            if pygame.sprite.spritecollideany(self.runner, self.virus_group):
-                pygame.display.update()
-                for entity in self.all_sprites:
-                    entity.kill()
+            if pygame.sprite.spritecollide(self.runner, self.virus_group,
+                                           True):  # self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
+                print("You are infected!")
+                player = Runner()
+                player.numOfLives = -1
+                if player.numOfLives < 3:
+                    pygame.sprite.Sprite.kill(self.health3)
 
-                pygame.quit()
-                sys.exit()
+                if player.numOfLives < 2:
+                    pygame.sprite.Sprite.kill(self.health2)
 
                 #self.virus.image.fill(TRANSPARENT)  # make virus transparent after collision (causes error)
         except AttributeError:
