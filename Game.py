@@ -6,8 +6,10 @@ from settings import *
 from Runner import Runner  # from filename import className
 from Virus import Virus  # from filename import className
 from Health import Health1, Health2, Health3
+
 FPS = 60
-FramePerSec =pygame.time.Clock()
+FramePerSec = pygame.time.Clock()
+
 
 class Game:
     def __init__(self):  # initialize game window etc
@@ -28,11 +30,11 @@ class Game:
         self.all_sprites.add(self.runner)
 
         # all about virus creation
-        self.frame_counter = 0 # use for intervals when producing new virus
-        self.virus_counter = 0 # TODO: maybe use later to increase virusproduction
+        self.frame_counter = 0  # use for intervals when producing new virus
+        self.virus_counter = 0  # TODO: maybe use later to increase virusproduction
         self.virus_frequency = 120
         self.superspreader = Superspreader()
-        self.virus_first = None # first virus
+        self.virus_first = None  # first virus
 
         # create hearts and add them to sprites group
         self.health1 = Health1()
@@ -44,7 +46,6 @@ class Game:
 
         # count collision -> virus
         self.collision_virus = 0
-
 
     def new(self):  # start a new game
         self.run()
@@ -66,9 +67,9 @@ class Game:
             self.virus_counter += 1
         self.all_sprites.update()
         pygame.display.update()  # update changes
-        self.frame_counter += 1 # necessary for virus sprite production
+        self.frame_counter += 1  # necessary for virus sprite production
 
-    def events(self): # game loop - events
+    def events(self):  # game loop - events
         self.game_over = False
         for event in pygame.event.get():  # loop through list of all different events
             if event.type == pygame.QUIT:
@@ -88,8 +89,9 @@ class Game:
         # detect collision
         self.check_collision_with_virus()
 
-    def check_collision_with_virus(self): # improve health decrease & collision detection
-        if pygame.sprite.spritecollide(self.runner, self.virus_group, True):# self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
+    def check_collision_with_virus(self):  # improve health decrease & collision detection
+        if pygame.sprite.spritecollide(self.runner, self.virus_group,
+                                       True):  # self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
             self.collision_virus += 1
             print(self.collision_virus)
             if self.collision_virus == 1:
@@ -119,13 +121,6 @@ class Game:
 
     def show_go_screen(self):  # game over / continue
         pass
-
-
-
-
-
-
-
 
 
 class StartMenu:
@@ -160,6 +155,7 @@ class StartMenu:
                     while g.running:
                         g.new()
 
+            # TODO: reduce duplicate code with check_click method?
             self.click = False
             pygame.display.update()
             self.clock.tick(FPS)
@@ -175,15 +171,17 @@ class StartMenu:
             self.WIN.fill(WHITE)
             self.draw_text("Ooops! You are dead :/", self.font_big, BLACK, self.WIN, 100, 100)
 
+            # TODO: reduce duplicate code with check_click method?
             self.click = False
             pygame.display.update()
             self.clock.tick(FPS)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.running = False
+                    pygame.quit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         self.click = True
+
 
 g = Game()
 s = StartMenu()
