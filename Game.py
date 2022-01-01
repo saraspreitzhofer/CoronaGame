@@ -100,6 +100,7 @@ class Game:
                 pygame.sprite.Sprite.kill(self.health2)
             else:
                 print("you are  infected - death")
+                s.display_game_over()
                 # TODO: end the game when 3 viruses are collected --> Merve
                 # bedingung für Aufruf der end seite
 
@@ -169,6 +170,20 @@ class StartMenu:
                     if event.button == 1:
                         self.click = True
 
+    def display_game_over(self):
+        while self.running:
+            self.WIN.fill(WHITE)
+            self.draw_text("Ooops! You are dead :/", self.font_big, BLACK, self.WIN, 100, 100)
+
+            self.click = False
+            pygame.display.update()
+            self.clock.tick(FPS)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        self.click = True
 
 g = Game()
 s = StartMenu()
