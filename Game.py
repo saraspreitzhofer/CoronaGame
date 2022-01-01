@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame
 import os  # to define path to the images
 
 from Superspreader import Superspreader
@@ -42,6 +42,10 @@ class Game:
         self.all_sprites.add(self.health2)
         self.all_sprites.add(self.health3)
 
+        # count collision -> virus
+        self.collision_virus = 0
+
+
     def new(self):  # start a new game
         self.run()
 
@@ -82,15 +86,22 @@ class Game:
             self.runner.jump()
         # pygame.time.delay(400)  # slows down everything!
         # detect collision
-        # TODO Merve: improve health decrease
-        if pygame.sprite.spritecollide(self.runner, self.virus_group,
-                                       True):  # self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
-            print("You are infected!")
-            self.runner.numOfLives = -1
-            if self.runner.numOfLives < 3:
+        self.check_collision_with_virus()
+
+    def check_collision_with_virus(self): # improve health decrease & collision detection
+        if pygame.sprite.spritecollide(self.runner, self.virus_group, True):# self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
+            self.collision_virus += 1
+            print(self.collision_virus)
+            if self.collision_virus == 1:
                 pygame.sprite.Sprite.kill(self.health3)
-            elif self.runner.numOfLives < 2:
+            elif self.collision_virus == 3:
+                pygame.sprite.Sprite.kill(self.health1)
+            elif self.collision_virus == 2:
                 pygame.sprite.Sprite.kill(self.health2)
+            else:
+                print("you are  infected - death")
+                # TODO: end the game when 3 viruses are collected --> Merve
+                # bedingung für Aufruf der end seite
 
     def draw(self):  # game loop - draw
         self.WIN.fill(WHITE)  # RGB color for the window background, defined as constant
