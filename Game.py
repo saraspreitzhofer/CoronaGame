@@ -36,9 +36,17 @@ class Game:
         self.virus_counter = 0  # TODO: maybe use later to increase virusproduction
         self.virus_frequency = 120
         self.superspreader = Superspreader()
-        self.virus_first = None  # first virus
+
+        # count collision -> virus
+        self.collision_virus = 0
 
         # create hearts and add them to sprites group
+        self.health1 = None
+        self.health2 = None
+        self.health3 = None
+
+    def new(self):  # start a new game
+        # initialize health
         self.health1 = Health1()
         self.health2 = Health2()
         self.health3 = Health3()
@@ -46,10 +54,14 @@ class Game:
         self.all_sprites.add(self.health2)
         self.all_sprites.add(self.health3)
 
-        # count collision -> virus
+        # set counters to 0 (important when restarting the game)
+        self.virus_counter = 0
         self.collision_virus = 0
 
-    def new(self):  # start a new game
+        self.running = True
+        self.playing = True
+
+        # run the game
         self.run()
 
     def run(self):  # code that handles main game loop in pygame
@@ -76,7 +88,7 @@ class Game:
         for event in pygame.event.get():  # loop through list of all different events
             if event.type == pygame.QUIT:
                 if self.playing:
-                    self.playing = False  # end while loop if user quits game (press x)
+                    self.playing = False  # end while loop if user quits game (press x) TODO: quit game properly?
                 self.running = False
             # if self.jumping is False and event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             #    self.jumping = True
@@ -104,6 +116,7 @@ class Game:
                 pygame.sprite.Sprite.kill(self.health2)
             else:
                 print("you are  infected - death")
+                self.playing = False
                 s.display_game_over()
                 # TODO: end the game when 3 viruses are collected --> Merve
                 # bedingung für Aufruf der end seite
@@ -137,6 +150,18 @@ class Menu:
         self.font_big = pygame.font.Font(None, 100)
         self.click = False
 
+    def run(self):
+        self.click = False
+        pygame.display.update()
+        self.clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    self.click = True
+
     def draw_text(self, text, font, color, surface, x, y):
         text_obj = font.render(text, 1, color)
         text_rect = text_obj.get_rect()
@@ -154,21 +179,15 @@ class Menu:
 
             if start_button.collidepoint((mx, my)):
                 if self.click:
+                    self.click = False  # reset, otherwise same reaction without click
                     while g.running:
                         g.new()
-
-            self.click = False
-            pygame.display.update()
-            self.clock.tick(FPS)
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        self.click = True
+            self.run()
 
     def display_game_over(self):
+        virus_avoided = g.virus_counter-g.collision_virus
         while self.running:
+            # initialize text and buttons
             self.WIN.fill(WHITE)
             mx, my = pygame.mouse.get_pos()
             play_again_button = pygame.Rect(180, 230, 250, 80)
@@ -181,25 +200,18 @@ class Menu:
 
             if play_again_button.collidepoint(mx, my):
                 if self.click:
-                    g.new()
-            elif quit_button.collidepoint(mx, my):
+                    self.click = False  # reset click to False
+                    g.new()  # run a new game
+
+            if quit_button.collidepoint(mx, my):
                 if self.click:
                     pygame.quit()
                     sys.exit()
 
-            self.click = False
-            pygame.display.update()
-            self.clock.tick(FPS)
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        self.click = True
+            self.run()
 
 
 g = Game()
 s = Menu()
 while s.running:
-    s.display_game_over()
+    s.display_main_menu()
