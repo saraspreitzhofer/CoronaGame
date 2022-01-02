@@ -179,7 +179,7 @@ class Menu:
 
             if start_button.collidepoint((mx, my)):
                 if self.click:
-                    self.click = False  # reset, otherwise same reaction without click
+                    self.click = False  # reset to avoid zombie runner (continues running when dead if mouse stays in the same position)
                     while g.running:
                         g.new()
             self.run()
@@ -205,10 +205,9 @@ class Menu:
                 self.draw_text("Viruses avoided: " + str(virus_avoided), self.font_small, BLACK,
                                self.WIN, 230, 350)
 
-
             if play_again_button.collidepoint(mx, my):
                 if self.click:
-                    self.click = False  # reset click to False
+                    self.click = False  # reset to avoid zombie runner (continues running when dead if mouse stays in the same position)
                     g.new()  # run a new game
 
             if quit_button.collidepoint(mx, my):
