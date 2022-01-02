@@ -198,6 +198,14 @@ class Menu:
             self.draw_text("Play again", self.font_small, BLACK, self.WIN, 200, 250)
             self.draw_text("Quit", self.font_small, BLACK, self.WIN, 490, 250)
 
+            if virus_avoided > 0:
+                self.draw_text("The good news: " + str(virus_avoided) + " viruses avoided", self.font_small, BLACK, self.WIN,
+                               150, 350)
+            else:
+                self.draw_text("Viruses avoided: " + str(virus_avoided), self.font_small, BLACK,
+                               self.WIN, 230, 350)
+
+
             if play_again_button.collidepoint(mx, my):
                 if self.click:
                     self.click = False  # reset click to False
