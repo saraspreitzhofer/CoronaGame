@@ -74,7 +74,7 @@ class Game:
     def update(self):  # game loop - update
         # virus sprite production depending on number of frames passed
         if self.frame_counter % self.virus_frequency == 0:
-            virus = self.superspreader.produce_virus(7)  # produce virus with velocity 5
+            virus = self.superspreader.produce_virus(7)  # produce virus with velocity 7
             self.all_sprites.add(virus)  # add virus to sprites group
             self.virus_group.add(virus)
             self.frame_counter = 0
@@ -88,12 +88,12 @@ class Game:
         for event in pygame.event.get():  # loop through list of all different events
             if event.type == pygame.QUIT:
                 if self.playing:
-                    self.playing = False  # end while loop if user quits game (press x) TODO: quit game properly?
+                    self.playing = False  # end while loop if user quits game (press x)
                 self.running = False
+                pygame.quit()   # TODO: quit game properly?
+                sys.exit()
             # if self.jumping is False and event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             #    self.jumping = True
-            # if self.jumping:
-            #    self.jump()
         user_input = pygame.key.get_pressed()  # list of currently pressed key(s)
         if self.runner.jumping is False and user_input[pygame.K_SPACE]:
             self.runner.jumping = True
@@ -172,17 +172,49 @@ class Menu:
         while self.running:
             self.WIN.fill(WHITE)
             mx, my = pygame.mouse.get_pos()
-            start_button = pygame.Rect(280, 230, 150, 80)
+            # create buttons
+            start_button = pygame.Rect(WIDTH/2 - BUTTON_WIDTH/2, 180, BUTTON_WIDTH, BUTTON_HEIGHT)
+            highscore_button = pygame.Rect(WIDTH/2 - BUTTON_WIDTH/2, 180 + MARGIN + BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
+            quit_button = pygame.Rect(WIDTH/2 - BUTTON_WIDTH/2, 180 + 2*MARGIN + 2*BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
+            # display rectangles
             pygame.draw.rect(self.WIN, GREY, start_button)
-            self.draw_text("Play", self.font_small, BLACK, self.WIN, 300, 250)
-            self.draw_text("Corona Game", self.font_big, BLACK, self.WIN, 200, 100)
+            pygame.draw.rect(self.WIN, GREY, highscore_button)
+            pygame.draw.rect(self.WIN, GREY, quit_button)
+            # create circle button
+            help_button = pygame.draw.circle(self.WIN, GREY, (WIDTH-2*MARGIN-RADIUS, 2*MARGIN+RADIUS), RADIUS) # surface, color, center, radius
+            # display text
+            self.draw_text("Corona Game", self.font_big, BLACK, self.WIN, 220, 80)
+            self.draw_text("Play", self.font_small, BLACK, self.WIN, WIDTH/2 - BUTTON_WIDTH/2 + 2*MARGIN, 180+MARGIN)
+            self.draw_text("High Score", self.font_small, BLACK, self.WIN, WIDTH/2 - BUTTON_WIDTH/2 + 2*MARGIN, 180 + 2*MARGIN + BUTTON_HEIGHT)
+            self.draw_text("Quit", self.font_small, BLACK, self.WIN, WIDTH/2 - BUTTON_WIDTH/2 + 2*MARGIN, 180 + 3*MARGIN + 2*BUTTON_HEIGHT)
+            self.draw_text("?", self.font_small, BLACK, self.WIN, help_button.x+MARGIN, help_button.y+MARGIN)
+            # display pictures
+            runner = pygame.transform.scale(pygame.image.load(os.path.join('assets', "runner.png")), (RUNNER_WIDTH*1.5, RUNNER_HEIGHT*1.5))
+            small_virus = pygame.transform.scale(pygame.image.load(os.path.join('assets', "virus.png")), (VIRUS_WIDTH, VIRUS_HEIGHT))
+            big_virus = pygame.transform.scale(pygame.image.load(os.path.join('assets', "virus.png")), (VIRUS_WIDTH*2, VIRUS_HEIGHT*2))
+            self.WIN.blit(runner, (WIDTH-2*MARGIN-RUNNER_WIDTH*1.5, HEIGHT-2*MARGIN-RUNNER_HEIGHT*1.5))  # draw surface (pictures, text, ...) on the screen
+            self.WIN.blit(small_virus, (50, 350))
+            self.WIN.blit(big_virus, (150, 200))
 
             if start_button.collidepoint((mx, my)):
                 if self.click:
                     self.click = False  # reset to avoid zombie runner (continues running when dead if mouse stays in the same position)
                     while g.running:
                         g.new()
+            if quit_button.collidepoint(mx, my):
+                if self.click:
+                    pygame.quit()
+                    sys.exit()
+            if highscore_button.collidepoint(mx, my):
+                if self.click:
+                    # TODO: display highscores
+                    pass
+            if help_button.collidepoint(mx, my):
+                if self.click:
+                    # TODO: display help page
+                    pass
             self.run()
+
 
     def display_game_over(self):
         virus_avoided = g.virus_counter-g.collision_virus
