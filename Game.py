@@ -115,16 +115,16 @@ class Game:
             print(self.collision_virus)
             if self.collision_virus == 1:
                 pygame.sprite.Sprite.kill(self.health3)
-            elif self.collision_virus == 3:
-                pygame.sprite.Sprite.kill(self.health1)
             elif self.collision_virus == 2:
                 pygame.sprite.Sprite.kill(self.health2)
-            else:
-                print("you are  infected - death")
-                self.playing = False
+
+            elif self.collision_virus == 3: #display_game_over hier aufrufen
+                pygame.sprite.Sprite.kill(self.health1)
+                print("you are  dead ")
+                #self.playing = False
                 s.display_game_over()
                 # TODO: end the game when 3 viruses are collected --> Merve
-                # bedingung für Aufruf der end seite
+                # bedingung für Aufruf der end seite --> bei 3 collision
 
     def draw(self):  # game loop - draw
         self.WIN.fill(WHITE)  # RGB color for the window background, defined as constant
