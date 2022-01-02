@@ -23,6 +23,8 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         self.playing = True
+        self.pause = False
+        self.click = False
         # self.jumping = False  # ist jetzt in Klasse Runner
         self.all_sprites = pygame.sprite.Group()  # creates new empty group for all sprites
         self.virus_group = pygame.sprite.Group()
@@ -92,6 +94,9 @@ class Game:
                 self.running = False
                 pygame.quit()   # TODO: quit game properly?
                 sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    self.click = True
             # if self.jumping is False and event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             #    self.jumping = True
         user_input = pygame.key.get_pressed()  # list of currently pressed key(s)
@@ -124,12 +129,34 @@ class Game:
     def draw(self):  # game loop - draw
         self.WIN.fill(WHITE)  # RGB color for the window background, defined as constant
         # coordinate system: (0,0) is top left
+
         # uncommented because included in all_sprites group:
         # self.WIN.blit(self.runner.image,
         #              (self.runner.rect.x, self.runner.rect.y))  # draw surface (pictures, text, ...) on the screen
         # self.WIN.blit(self.virus.image,
         #              (self.virus.rect.x, self.virus.rect.y))
         self.all_sprites.draw(self.WIN)
+        mx, my = pygame.mouse.get_pos()
+        stop_button = pygame.Rect(WIDTH - 2*MARGIN - SMALL_BUTTON_WIDTH, MARGIN, SMALL_BUTTON_WIDTH, SMALL_BUTTON_HEIGHT)
+        pause_button = pygame.Rect(WIDTH - 2*MARGIN - SMALL_BUTTON_WIDTH, 2*MARGIN + SMALL_BUTTON_HEIGHT, SMALL_BUTTON_WIDTH, SMALL_BUTTON_HEIGHT)
+        pygame.draw.rect(self.WIN, GREY, stop_button)
+        pygame.draw.rect(self.WIN, GREY, pause_button)
+        Menu.draw_text(self, "stop", pygame.font.Font(None, 50), BLACK, self.WIN, WIDTH - MARGIN - SMALL_BUTTON_WIDTH, 2*MARGIN)
+        Menu.draw_text(self, "pause", pygame.font.Font(None, 50), BLACK, self.WIN, WIDTH - MARGIN - SMALL_BUTTON_WIDTH, 3*MARGIN + SMALL_BUTTON_HEIGHT)
+
+        if stop_button.collidepoint(mx, my):
+            if self.click:
+                self.click = False
+                # TODO: jump to start screen, virus should start on the right
+                pass
+                # s.display_main_menu()   # not correct yet, when pressing start the virus starts where you stopped the game, not at the beginning
+        if pause_button.collidepoint(mx, my):
+            if self.click:
+                self.click = False
+                self.pause = True
+                # while self.pause:
+                    # TODO: implement pause function, maybe with additional screen with continue button
+                    # pygame.time.wait(500)   # wait 500 milliseconds
 
     def show_start_screen(self):  # game splash / start screen
         pass
