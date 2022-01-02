@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 import os  # to define path to the images
 
@@ -123,7 +125,7 @@ class Game:
         pass
 
 
-class StartMenu:
+class Menu:
     def __init__(self):  # initialize game window etc
         pygame.init()
         pygame.mixer.init()
@@ -155,7 +157,6 @@ class StartMenu:
                     while g.running:
                         g.new()
 
-            # TODO: reduce duplicate code with check_click method?
             self.click = False
             pygame.display.update()
             self.clock.tick(FPS)
@@ -169,21 +170,36 @@ class StartMenu:
     def display_game_over(self):
         while self.running:
             self.WIN.fill(WHITE)
+            mx, my = pygame.mouse.get_pos()
+            play_again_button = pygame.Rect(180, 230, 250, 80)
+            quit_button = pygame.Rect(470, 230, 130, 80)
+            pygame.draw.rect(self.WIN, GREY, play_again_button)
+            pygame.draw.rect(self.WIN, GREY, quit_button)
             self.draw_text("Ooops! You are dead :/", self.font_big, BLACK, self.WIN, 100, 100)
+            self.draw_text("Play again", self.font_small, BLACK, self.WIN, 200, 250)
+            self.draw_text("Quit", self.font_small, BLACK, self.WIN, 490, 250)
 
-            # TODO: reduce duplicate code with check_click method?
+            if play_again_button.collidepoint(mx, my):
+                if self.click:
+                    g.new()
+            elif quit_button.collidepoint(mx, my):
+                if self.click:
+                    pygame.quit()
+                    sys.exit()
+
             self.click = False
             pygame.display.update()
             self.clock.tick(FPS)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
+                    sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         self.click = True
 
 
 g = Game()
-s = StartMenu()
+s = Menu()
 while s.running:
-    s.display_main_menu()
+    s.display_game_over()
