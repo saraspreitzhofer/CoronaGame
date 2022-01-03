@@ -36,7 +36,7 @@ class Game:
         # all about virus creation
         self.frame_counter = 0  # use for intervals when producing new virus
         self.virus_counter = 0  # TODO: maybe use later to increase virusproduction
-        self.virus_frequency = 120
+        self.virus_frequency = FRAMES_BETWEEN_VIRUS_START
         self.superspreader = Superspreader()
 
         # count collision -> virus
@@ -59,6 +59,7 @@ class Game:
         # set counters to 0 (important when restarting the game)
         self.virus_counter = 0
         self.collision_virus = 0
+        self.virus_frequency = FRAMES_BETWEEN_VIRUS_START
 
         self.running = True
         self.playing = True
@@ -76,7 +77,7 @@ class Game:
     def update(self):  # game loop - update
         # virus sprite production depending on number of frames passed
         if self.frame_counter % self.virus_frequency == 0:
-            virus = self.superspreader.produce_virus(7)  # produce virus with velocity 7
+            virus = self.superspreader.produce_virus(7, 120, self)  # produce virus with velocity 7
             self.all_sprites.add(virus)  # add virus to sprites group
             self.virus_group.add(virus)
             self.frame_counter = 0

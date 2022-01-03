@@ -18,5 +18,9 @@ TRANSPARENT = (0, 0, 0, 0)
 
 ROTATEBY_VIRUS = 5
 
+# virus frequency settings
+FRAMES_BETWEEN_VIRUS_START = 140 # TODO: is reduced immediately. not very elegant.
+REDUCE_FRAMES_BETWEEN_VIRUS = 20
+
 
 
