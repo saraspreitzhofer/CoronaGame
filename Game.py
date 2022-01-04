@@ -93,7 +93,7 @@ class Game:
                 if self.playing:
                     self.playing = False  # end while loop if user quits game (press x)
                 self.running = False
-                pygame.quit()   # TODO: quit game properly?
+                pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
@@ -119,10 +119,10 @@ class Game:
             elif self.collision_virus == 2:
                 pygame.sprite.Sprite.kill(self.health2)
 
-            elif self.collision_virus == 3: #display_game_over hier aufrufen
+            elif self.collision_virus == 3:  # display_game_over hier aufrufen
                 pygame.sprite.Sprite.kill(self.health1)
                 print("you are  dead ")
-                #self.playing = False
+                # self.playing = False
                 s.display_game_over()
                 # TODO: end the game when 3 viruses are collected --> Merve
                 # bedingung für Aufruf der end seite --> bei 3 collision
@@ -138,12 +138,16 @@ class Game:
         #              (self.virus.rect.x, self.virus.rect.y))
         self.all_sprites.draw(self.WIN)
         mx, my = pygame.mouse.get_pos()
-        stop_button = pygame.Rect(WIDTH - 2*MARGIN - SMALL_BUTTON_WIDTH, MARGIN, SMALL_BUTTON_WIDTH, SMALL_BUTTON_HEIGHT)
-        pause_button = pygame.Rect(WIDTH - 2*MARGIN - SMALL_BUTTON_WIDTH, 2*MARGIN + SMALL_BUTTON_HEIGHT, SMALL_BUTTON_WIDTH, SMALL_BUTTON_HEIGHT)
+        stop_button = pygame.Rect(WIDTH - 2 * MARGIN - SMALL_BUTTON_WIDTH, MARGIN, SMALL_BUTTON_WIDTH,
+                                  SMALL_BUTTON_HEIGHT)
+        pause_button = pygame.Rect(WIDTH - 2 * MARGIN - SMALL_BUTTON_WIDTH, 2 * MARGIN + SMALL_BUTTON_HEIGHT,
+                                   SMALL_BUTTON_WIDTH, SMALL_BUTTON_HEIGHT)
         pygame.draw.rect(self.WIN, GREY, stop_button)
         pygame.draw.rect(self.WIN, GREY, pause_button)
-        Menu.draw_text(self, "stop", pygame.font.Font(None, 50), BLACK, self.WIN, WIDTH - MARGIN - SMALL_BUTTON_WIDTH, 2*MARGIN)
-        Menu.draw_text(self, "pause", pygame.font.Font(None, 50), BLACK, self.WIN, WIDTH - MARGIN - SMALL_BUTTON_WIDTH, 3*MARGIN + SMALL_BUTTON_HEIGHT)
+        Menu.draw_text(self, "stop", pygame.font.Font(None, 50), BLACK, self.WIN, WIDTH - MARGIN - SMALL_BUTTON_WIDTH,
+                       2 * MARGIN)
+        Menu.draw_text(self, "pause", pygame.font.Font(None, 50), BLACK, self.WIN, WIDTH - MARGIN - SMALL_BUTTON_WIDTH,
+                       3 * MARGIN + SMALL_BUTTON_HEIGHT)
 
         if stop_button.collidepoint(mx, my):
             if self.click:
@@ -155,9 +159,8 @@ class Game:
             if self.click:
                 self.click = False
                 self.pause = True
-                # while self.pause:
-                    # TODO: implement pause function, maybe with additional screen with continue button
-                    # pygame.time.wait(500)   # wait 500 milliseconds
+                while self.pause:
+                    s.display_pause_screen()
 
     def show_start_screen(self):  # game splash / start screen
         pass
@@ -202,26 +205,36 @@ class Menu:
             self.WIN.fill(WHITE)
             mx, my = pygame.mouse.get_pos()
             # create buttons
-            start_button = pygame.Rect(WIDTH/2 - BUTTON_WIDTH/2, 180, BUTTON_WIDTH, BUTTON_HEIGHT)
-            highscore_button = pygame.Rect(WIDTH/2 - BUTTON_WIDTH/2, 180 + MARGIN + BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
-            quit_button = pygame.Rect(WIDTH/2 - BUTTON_WIDTH/2, 180 + 2*MARGIN + 2*BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
+            start_button = pygame.Rect(WIDTH / 2 - BUTTON_WIDTH / 2, 180, BUTTON_WIDTH, BUTTON_HEIGHT)
+            highscore_button = pygame.Rect(WIDTH / 2 - BUTTON_WIDTH / 2, 180 + MARGIN + BUTTON_HEIGHT, BUTTON_WIDTH,
+                                           BUTTON_HEIGHT)
+            quit_button = pygame.Rect(WIDTH / 2 - BUTTON_WIDTH / 2, 180 + 2 * MARGIN + 2 * BUTTON_HEIGHT, BUTTON_WIDTH,
+                                      BUTTON_HEIGHT)
             # display rectangles
             pygame.draw.rect(self.WIN, GREY, start_button)
             pygame.draw.rect(self.WIN, GREY, highscore_button)
             pygame.draw.rect(self.WIN, GREY, quit_button)
             # create circle button
-            help_button = pygame.draw.circle(self.WIN, GREY, (WIDTH-2*MARGIN-RADIUS, 2*MARGIN+RADIUS), RADIUS) # surface, color, center, radius
+            help_button = pygame.draw.circle(self.WIN, GREY, (WIDTH - 2 * MARGIN - RADIUS, 2 * MARGIN + RADIUS),
+                                             RADIUS)  # surface, color, center, radius
             # display text
             self.draw_text("Corona Game", self.font_big, BLACK, self.WIN, 220, 80)
-            self.draw_text("Play", self.font_small, BLACK, self.WIN, WIDTH/2 - BUTTON_WIDTH/2 + 2*MARGIN, 180+MARGIN)
-            self.draw_text("High Score", self.font_small, BLACK, self.WIN, WIDTH/2 - BUTTON_WIDTH/2 + 2*MARGIN, 180 + 2*MARGIN + BUTTON_HEIGHT)
-            self.draw_text("Quit", self.font_small, BLACK, self.WIN, WIDTH/2 - BUTTON_WIDTH/2 + 2*MARGIN, 180 + 3*MARGIN + 2*BUTTON_HEIGHT)
-            self.draw_text("?", self.font_small, BLACK, self.WIN, help_button.x+MARGIN, help_button.y+MARGIN)
+            self.draw_text("Play", self.font_small, BLACK, self.WIN, WIDTH / 2 - BUTTON_WIDTH / 2 + 2 * MARGIN,
+                           180 + MARGIN)
+            self.draw_text("High Score", self.font_small, BLACK, self.WIN, WIDTH / 2 - BUTTON_WIDTH / 2 + 2 * MARGIN,
+                           180 + 2 * MARGIN + BUTTON_HEIGHT)
+            self.draw_text("Quit", self.font_small, BLACK, self.WIN, WIDTH / 2 - BUTTON_WIDTH / 2 + 2 * MARGIN,
+                           180 + 3 * MARGIN + 2 * BUTTON_HEIGHT)
+            self.draw_text("?", self.font_small, BLACK, self.WIN, help_button.x + MARGIN, help_button.y + MARGIN)
             # display pictures
-            runner = pygame.transform.scale(pygame.image.load(os.path.join('assets', "runner.png")), (RUNNER_WIDTH*1.5, RUNNER_HEIGHT*1.5))
-            small_virus = pygame.transform.scale(pygame.image.load(os.path.join('assets', "virus.png")), (VIRUS_WIDTH, VIRUS_HEIGHT))
-            big_virus = pygame.transform.scale(pygame.image.load(os.path.join('assets', "virus.png")), (VIRUS_WIDTH*2, VIRUS_HEIGHT*2))
-            self.WIN.blit(runner, (WIDTH-2*MARGIN-RUNNER_WIDTH*1.5, HEIGHT-2*MARGIN-RUNNER_HEIGHT*1.5))  # draw surface (pictures, text, ...) on the screen
+            runner = pygame.transform.scale(pygame.image.load(os.path.join('assets', "runner.png")),
+                                            (RUNNER_WIDTH * 1.5, RUNNER_HEIGHT * 1.5))
+            small_virus = pygame.transform.scale(pygame.image.load(os.path.join('assets', "virus.png")),
+                                                 (VIRUS_WIDTH, VIRUS_HEIGHT))
+            big_virus = pygame.transform.scale(pygame.image.load(os.path.join('assets', "virus.png")),
+                                               (VIRUS_WIDTH * 2, VIRUS_HEIGHT * 2))
+            self.WIN.blit(runner, (WIDTH - 2 * MARGIN - RUNNER_WIDTH * 1.5,
+                                   HEIGHT - 2 * MARGIN - RUNNER_HEIGHT * 1.5))  # draw surface (pictures, text, ...) on the screen
             self.WIN.blit(small_virus, (50, 350))
             self.WIN.blit(big_virus, (150, 200))
 
@@ -247,19 +260,19 @@ class Menu:
         while self.running:
             self.WIN.fill(WHITE)
             mx, my = pygame.mouse.get_pos()
-            back_button = pygame.Rect(MARGIN, HEIGHT-MARGIN-BUTTON_HEIGHT, BUTTON_WIDTH*0.75, BUTTON_HEIGHT)
+            back_button = pygame.Rect(MARGIN, HEIGHT - MARGIN - BUTTON_HEIGHT, BUTTON_WIDTH * 0.75, BUTTON_HEIGHT)
             pygame.draw.rect(self.WIN, GREY, back_button)
-            self.draw_text("<-- Back", self.font_small, BLACK, self.WIN, 2*MARGIN, HEIGHT-BUTTON_HEIGHT)
+            self.draw_text("<-- Back", self.font_small, BLACK, self.WIN, 2 * MARGIN, HEIGHT - BUTTON_HEIGHT)
             self.draw_text("Corona Game", self.font_big, BLACK, self.WIN, 220, 80)
             # jede Zeile in einen Befehl, falls jemand eine bessere Lösung hat bitte ändern
             self.draw_text("Anleitung Bla Bla alsdjf aslkd föalskd falsdk lasd fklasd asd",
-                           self.font_very_small, BLACK, self.WIN, 2*MARGIN, 180)
+                           self.font_very_small, BLACK, self.WIN, 2 * MARGIN, 180)
             self.draw_text("fj aölksdjf asklöd jfaöksldf jalskd föasldkf asdk fjasdklöf ",
-                           self.font_very_small, BLACK, self.WIN, 2*MARGIN, 230)
+                           self.font_very_small, BLACK, self.WIN, 2 * MARGIN, 230)
             self.draw_text("fj aölksdjf asklöd jfaöksldf jalskd föasldkf asdk fjasdklöf ",
                            self.font_very_small, BLACK, self.WIN, 2 * MARGIN, 280)
             self.draw_text("ycxjkv lykjsdflkwajerf klyxcnvpoid",
-                           self.font_very_small, BLACK, self.WIN, 2*MARGIN, 330)
+                           self.font_very_small, BLACK, self.WIN, 2 * MARGIN, 330)
 
             if back_button.collidepoint((mx, my)):
                 if self.click:
@@ -268,9 +281,23 @@ class Menu:
 
             self.run()
 
+    def display_pause_screen(self):
+        while self.running:
+            self.WIN.fill(WHITE)
+            mx, my = pygame.mouse.get_pos()
+            continue_button = pygame.Rect(WIDTH/2-BUTTON_WIDTH/2, HEIGHT/2 - BUTTON_HEIGHT/2, BUTTON_WIDTH, BUTTON_HEIGHT)
+            pygame.draw.rect(self.WIN, GREY, continue_button)
+            self.draw_text("Continue", self.font_small, BLACK, self.WIN, WIDTH/2-BUTTON_WIDTH/2+2*MARGIN, HEIGHT/2 - BUTTON_HEIGHT/2+MARGIN)
+
+            if continue_button.collidepoint((mx, my)):
+                if self.click:
+                    self.click = False
+                    g.pause = False
+                    break
+            self.run()
 
     def display_game_over(self):
-        virus_avoided = g.virus_counter-g.collision_virus
+        virus_avoided = g.virus_counter - g.collision_virus
         while self.running:
             # initialize text and buttons
             self.WIN.fill(WHITE)
