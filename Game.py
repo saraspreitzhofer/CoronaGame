@@ -174,6 +174,7 @@ class Menu:
         pygame.display.set_caption(TITLE_START)  # window title
         self.running = True
         self.clock = pygame.time.Clock()
+        self.font_very_small = pygame.font.Font(None, 40)
         self.font_small = pygame.font.Font(None, 60)
         self.font_big = pygame.font.Font(None, 100)
         self.click = False
@@ -239,8 +240,32 @@ class Menu:
                     pass
             if help_button.collidepoint(mx, my):
                 if self.click:
-                    # TODO: display help page
-                    pass
+                    s.display_help_page()
+            self.run()
+
+    def display_help_page(self):
+        while self.running:
+            self.WIN.fill(WHITE)
+            mx, my = pygame.mouse.get_pos()
+            back_button = pygame.Rect(MARGIN, HEIGHT-MARGIN-BUTTON_HEIGHT, BUTTON_WIDTH*0.75, BUTTON_HEIGHT)
+            pygame.draw.rect(self.WIN, GREY, back_button)
+            self.draw_text("<-- Back", self.font_small, BLACK, self.WIN, 2*MARGIN, HEIGHT-BUTTON_HEIGHT)
+            self.draw_text("Corona Game", self.font_big, BLACK, self.WIN, 220, 80)
+            # jede Zeile in einen Befehl, falls jemand eine bessere Lösung hat bitte ändern
+            self.draw_text("Anleitung Bla Bla alsdjf aslkd föalskd falsdk lasd fklasd asd",
+                           self.font_very_small, BLACK, self.WIN, 2*MARGIN, 180)
+            self.draw_text("fj aölksdjf asklöd jfaöksldf jalskd föasldkf asdk fjasdklöf ",
+                           self.font_very_small, BLACK, self.WIN, 2*MARGIN, 230)
+            self.draw_text("fj aölksdjf asklöd jfaöksldf jalskd föasldkf asdk fjasdklöf ",
+                           self.font_very_small, BLACK, self.WIN, 2 * MARGIN, 280)
+            self.draw_text("ycxjkv lykjsdflkwajerf klyxcnvpoid",
+                           self.font_very_small, BLACK, self.WIN, 2*MARGIN, 330)
+
+            if back_button.collidepoint((mx, my)):
+                if self.click:
+                    self.click = False
+                    s.display_main_menu()
+
             self.run()
 
 
