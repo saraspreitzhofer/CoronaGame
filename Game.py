@@ -17,7 +17,7 @@ class Game:
     def __init__(self):  # initialize game window etc
         self.game_over = None
         pygame.init()
-        pygame.mixer.init()
+        pygame.mixer.init()     # for sounds
         self.WIN = pygame.display.set_mode((WIDTH, HEIGHT))  # make new window of defined width & height
         pygame.display.set_caption(TITLE)  # window title
         self.clock = pygame.time.Clock()
@@ -113,6 +113,7 @@ class Game:
         if pygame.sprite.spritecollide(self.runner, self.virus_group,
                                        True):  # self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
             self.collision_virus += 1
+            COLLISION_SOUND.play()
             print(self.collision_virus)
             if self.collision_virus == 1:
                 pygame.sprite.Sprite.kill(self.health3)
@@ -311,6 +312,7 @@ class Menu:
 
     def display_game_over(self):
         virus_avoided = g.virus_counter - g.collision_virus
+        GAME_OVER_SOUND.play()
         while self.running:
             # initialize text and buttons
             self.WIN.fill(WHITE)

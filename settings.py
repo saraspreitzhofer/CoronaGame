@@ -1,3 +1,8 @@
+import pygame.mixer
+import os
+
+pygame.mixer.init()  # for sounds
+
 TITLE = "Corona Game"
 TITLE_START = "Start Menu"
 FPS = 60  # frames per second
@@ -21,6 +26,10 @@ ROTATEBY_VIRUS = 5
 # virus frequency settings
 FRAMES_BETWEEN_VIRUS_START = 140 # TODO: is reduced immediately. not very elegant.
 REDUCE_FRAMES_BETWEEN_VIRUS = 20
+
+# sounds
+GAME_OVER_SOUND = pygame.mixer.Sound(os.path.join('assets', 'zapsplat_game_over.mp3'))
+COLLISION_SOUND = pygame.mixer.Sound(os.path.join('assets', 'zapsplat_cough.mp3'))
 
 
 
