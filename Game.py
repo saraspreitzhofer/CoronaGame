@@ -137,6 +137,7 @@ class Game:
         # self.WIN.blit(self.virus.image,
         #              (self.virus.rect.x, self.virus.rect.y))
         self.all_sprites.draw(self.WIN)
+        # start and stop button
         mx, my = pygame.mouse.get_pos()
         stop_button = pygame.Rect(WIDTH - 2 * MARGIN - SMALL_BUTTON_WIDTH, MARGIN, SMALL_BUTTON_WIDTH,
                                   SMALL_BUTTON_HEIGHT)
@@ -162,11 +163,23 @@ class Game:
                 while self.pause:
                     s.display_pause_screen()
 
-    def show_start_screen(self):  # game splash / start screen
-        pass
+        # display points during the game
+        # workaround, weil virus_counter - collision_virus die Anzahl der Viren ist, die rechts erscheinen.
+        # Wir wollen aber Anzahl der Viren, die links den Screen verlassen
+        # das selbe gilt auch für den Game Over Screen
+        # TODO: fix the virus counter
+        points = self.virus_counter-self.collision_virus-1
+        text = "Points: " + str(points)
+        if points < 0:      # damit points am Anfang nicht -1 sind
+            Menu.draw_text(self, "Points: 0", pygame.font.Font(None, 50), BLACK, self.WIN, 400, 2 * MARGIN)
+        else:
+            Menu.draw_text(self, text, pygame.font.Font(None, 50), BLACK, self.WIN, 400, 2*MARGIN)
 
-    def show_go_screen(self):  # game over / continue
-        pass
+    # def show_start_screen(self):  # game splash / start screen
+    #    pass
+
+    # def show_go_screen(self):  # game over / continue
+    #    pass
 
 
 class Menu:
