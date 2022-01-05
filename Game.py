@@ -103,6 +103,7 @@ class Game:
         user_input = pygame.key.get_pressed()  # list of currently pressed key(s)
         if self.runner.jumping is False and user_input[pygame.K_SPACE]:
             self.runner.jumping = True
+            JUMP_SOUND.play()   # muss an diese Stelle, überall anders wird der Ton verzerrt
         if self.runner.jumping:
             self.runner.jump()
         # pygame.time.delay(400)  # slows down everything!
