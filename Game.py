@@ -248,11 +248,9 @@ class Menu:
             self.WIN.fill(WHITE)
             mx, my = pygame.mouse.get_pos()
             # create buttons
-            start_button = pygame.Rect(WIDTH / 2 - BUTTON_WIDTH / 2, 180, BUTTON_WIDTH, BUTTON_HEIGHT)
-            highscore_button = pygame.Rect(WIDTH / 2 - BUTTON_WIDTH / 2, 180 + MARGIN + BUTTON_HEIGHT, BUTTON_WIDTH,
-                                           BUTTON_HEIGHT)
-            quit_button = pygame.Rect(WIDTH / 2 - BUTTON_WIDTH / 2, 180 + 2 * MARGIN + 2 * BUTTON_HEIGHT, BUTTON_WIDTH,
-                                      BUTTON_HEIGHT)
+            start_button = pygame.Rect(BUTTON1)
+            highscore_button = pygame.Rect(BUTTON2)
+            quit_button = pygame.Rect(BUTTON3)
             # display rectangles
             pygame.draw.rect(self.WIN, GREY, start_button)
             pygame.draw.rect(self.WIN, GREY, highscore_button)
