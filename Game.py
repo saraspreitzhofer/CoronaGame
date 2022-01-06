@@ -147,8 +147,6 @@ class Game:
                 print("you are  dead ")
                 self.end_game()  # for a clean end
                 s.display_game_over()
-                # TODO: end the game when 3 viruses are collected --> Merve
-                # bedingung für Aufruf der end seite --> bei 3 collision
 
     def check_collision_with_mask(self):
         if pygame.sprite.spritecollide(self.runner, self.mask_group, True):
@@ -194,9 +192,8 @@ class Game:
             if self.click:
                 self.click = False
                 # self.playing = False  - moved to end_game()
-                # TODO: jump to start screen, virus should start on the right DONE
                 self.end_game()  # kills all virus objects produced so far
-                s.display_main_menu()  # not correct yet, when pressing start the virus starts where you stopped the game, not at the beginning
+                s.display_main_menu()
         if pause_button.collidepoint(mx, my):
             if self.click:
                 self.click = False
@@ -205,16 +202,8 @@ class Game:
                     s.display_pause_screen()
 
         # display points during the game
-        # workaround, weil virus_counter - collision_virus die Anzahl der Viren ist, die rechts erscheinen.
-        # Wir wollen aber Anzahl der Viren, die links den Screen verlassen
-        # das selbe gilt auch für den Game Over Screen
-        # TODO: fix the virus counter DONE (Ula)
-        # points = self.virus_counter-self.collision_virus-1
         text = "Points: " + str(self.viruses_avoided)
-        if self.viruses_avoided < 0:  # damit points am Anfang nicht -1 sind
-            Menu.draw_text(self, "Points: 0", pygame.font.Font(None, 50), BLACK, self.WIN, 400, 2 * MARGIN)
-        else:
-            Menu.draw_text(self, text, pygame.font.Font(None, 50), BLACK, self.WIN, 400, 2 * MARGIN)
+        Menu.draw_text(self, text, pygame.font.Font(None, 50), BLACK, self.WIN, 400, 2 * MARGIN)
 
     # def show_start_screen(self):  # game splash / start screen
     #    pass
