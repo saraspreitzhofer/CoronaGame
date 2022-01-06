@@ -19,7 +19,7 @@ class Game:
     def __init__(self):  # initialize game window etc
         self.game_over = None
         pygame.init()
-        pygame.mixer.init()     # for sounds
+        pygame.mixer.init()  # for sounds
         self.WIN = pygame.display.set_mode((WIDTH, HEIGHT))  # make new window of defined width & height
         pygame.display.set_caption(TITLE)  # window title
         self.clock = pygame.time.Clock()
@@ -122,7 +122,7 @@ class Game:
         user_input = pygame.key.get_pressed()  # list of currently pressed key(s)
         if self.runner.jumping is False and user_input[pygame.K_SPACE]:
             self.runner.jumping = True
-            JUMP_SOUND.play()   # muss an diese Stelle, überall anders wird der Ton verzerrt
+            JUMP_SOUND.play()  # muss an diese Stelle, überall anders wird der Ton verzerrt
         if self.runner.jumping:
             self.runner.jump()
         # pygame.time.delay(400)  # slows down everything!
@@ -142,7 +142,7 @@ class Game:
             elif self.collision_virus == 2:
                 pygame.sprite.Sprite.kill(self.health2)
 
-            elif self.collision_virus == 3: #display_game_over hier aufrufen
+            elif self.collision_virus == 3:  # display_game_over hier aufrufen
                 pygame.sprite.Sprite.kill(self.health1)
                 print("you are  dead ")
                 self.end_game()  # for a clean end
@@ -156,13 +156,13 @@ class Game:
             print("you are wearing a mask now")
             # todo: set timer and then set protection back to false
 
-    def count_points(self): # detect and kill escaped viruses with the help of points_counter sprite object
+    def count_points(self):  # detect and kill escaped viruses with the help of points_counter sprite object
         if pygame.sprite.spritecollide(self.points_counter, self.virus_group, True):
             self.viruses_avoided += 1
             print("Viruses escaped: " + str(self.viruses_avoided))
             print("Viruses in group: " + str(self.virus_group))
 
-    def end_game(self): # kill all remaining game objects
+    def end_game(self):  # kill all remaining game objects
         self.playing = False
         for thing in self.all_sprites:  # kills all sprites in the game ! all sprites have to be initialized again with new game!
             thing.kill()
@@ -196,7 +196,7 @@ class Game:
                 # self.playing = False  - moved to end_game()
                 # TODO: jump to start screen, virus should start on the right DONE
                 self.end_game()  # kills all virus objects produced so far
-                s.display_main_menu()   # not correct yet, when pressing start the virus starts where you stopped the game, not at the beginning
+                s.display_main_menu()  # not correct yet, when pressing start the virus starts where you stopped the game, not at the beginning
         if pause_button.collidepoint(mx, my):
             if self.click:
                 self.click = False
@@ -211,10 +211,10 @@ class Game:
         # TODO: fix the virus counter DONE (Ula)
         # points = self.virus_counter-self.collision_virus-1
         text = "Points: " + str(self.viruses_avoided)
-        if self.viruses_avoided < 0:      # damit points am Anfang nicht -1 sind
+        if self.viruses_avoided < 0:  # damit points am Anfang nicht -1 sind
             Menu.draw_text(self, "Points: 0", pygame.font.Font(None, 50), BLACK, self.WIN, 400, 2 * MARGIN)
         else:
-            Menu.draw_text(self, text, pygame.font.Font(None, 50), BLACK, self.WIN, 400, 2*MARGIN)
+            Menu.draw_text(self, text, pygame.font.Font(None, 50), BLACK, self.WIN, 400, 2 * MARGIN)
 
     # def show_start_screen(self):  # game splash / start screen
     #    pass
@@ -339,9 +339,11 @@ class Menu:
         while self.running:
             self.WIN.fill(WHITE)
             mx, my = pygame.mouse.get_pos()
-            continue_button = pygame.Rect(WIDTH/2-BUTTON_WIDTH/2, HEIGHT/2 - BUTTON_HEIGHT/2, BUTTON_WIDTH, BUTTON_HEIGHT)
+            continue_button = pygame.Rect(WIDTH / 2 - BUTTON_WIDTH / 2, HEIGHT / 2 - BUTTON_HEIGHT / 2, BUTTON_WIDTH,
+                                          BUTTON_HEIGHT)
             pygame.draw.rect(self.WIN, GREY, continue_button)
-            self.draw_text("Continue", self.font_small, BLACK, self.WIN, WIDTH/2-BUTTON_WIDTH/2+2*MARGIN, HEIGHT/2 - BUTTON_HEIGHT/2+MARGIN)
+            self.draw_text("Continue", self.font_small, BLACK, self.WIN, WIDTH / 2 - BUTTON_WIDTH / 2 + 2 * MARGIN,
+                           HEIGHT / 2 - BUTTON_HEIGHT / 2 + MARGIN)
 
             if continue_button.collidepoint((mx, my)):
                 if self.click:
@@ -350,7 +352,6 @@ class Menu:
                     break
             self.run()
 
-
     def display_game_over(self):
         print("len virus_group: " + str(len(g.virus_group)))
         GAME_OVER_SOUND.play()
@@ -358,16 +359,21 @@ class Menu:
             # initialize text and buttons
             self.WIN.fill(WHITE)
             mx, my = pygame.mouse.get_pos()
-            play_again_button = pygame.Rect(180, 230, 250, 80)
-            quit_button = pygame.Rect(470, 230, 130, 80)
+            play_again_button = pygame.Rect(BUTTON1)  # TODO: positionen von verbessern
+            main_menu_button = pygame.Rect(BUTTON2)
+            quit_button = pygame.Rect(BUTTON3)
             pygame.draw.rect(self.WIN, GREY, play_again_button)
+            pygame.draw.rect(self.WIN, GREY, main_menu_button)
             pygame.draw.rect(self.WIN, GREY, quit_button)
-            self.draw_text("Ooops! You are dead :/", self.font_big, BLACK, self.WIN, 100, 100)
-            self.draw_text("Play again", self.font_small, BLACK, self.WIN, 200, 250)
-            self.draw_text("Quit", self.font_small, BLACK, self.WIN, 490, 250)
+            self.draw_text("Ooops! You are dead :/", self.font_big, BLACK, self.WIN, 60, 40)
+            self.draw_text("Play again", self.font_small, BLACK, self.WIN, play_again_button.x + MARGIN,
+                           play_again_button.y + MARGIN)
+            self.draw_text("Main Menu", self.font_small, BLACK, self.WIN, main_menu_button.x + MARGIN,
+                           main_menu_button.y + MARGIN)
+            self.draw_text("Quit", self.font_small, BLACK, self.WIN, quit_button.x + MARGIN, quit_button.y + MARGIN)
 
             self.draw_text("Viruses avoided: " + str(g.viruses_avoided), self.font_small, BLACK,
-                           self.WIN, 230, 350)
+                           self.WIN, 250, 130)
 
             if play_again_button.collidepoint(mx, my):
                 if self.click:
@@ -378,6 +384,11 @@ class Menu:
                 if self.click:
                     pygame.quit()
                     sys.exit()
+
+            if main_menu_button.collidepoint(mx, my):
+                if self.click:
+                    self.click = False
+                    self.display_main_menu()
 
             self.run()
 
