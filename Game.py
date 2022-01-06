@@ -33,8 +33,7 @@ class Game:
         self.mask_group = pygame.sprite.Group()
 
         # create runner and add it to sprites group
-        self.runner = Runner()
-        self.all_sprites.add(self.runner)
+        self.runner = None
 
         # all about virus creation
         self.frame_counter = 0  # use for intervals when producing new virus
@@ -59,6 +58,10 @@ class Game:
         self.health3 = None
 
     def new(self):  # start a new game
+        # create runner and add it to sprites group
+        self.runner = Runner()
+        self.all_sprites.add(self.runner)
+
         # initialize health
         # create hearts and add them to sprites group
         self.health1 = Health1()
@@ -161,8 +164,8 @@ class Game:
 
     def end_game(self): # kill all remaining game objects
         self.playing = False
-        for virus in self.virus_group:
-            virus.kill()
+        for thing in self.all_sprites:  # kills all sprites in the game ! all sprites have to be initialized again with new game!
+            thing.kill()
 
     def draw(self):  # game loop - draw
         self.WIN.fill(WHITE)  # RGB color for the window background, defined as constant
