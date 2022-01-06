@@ -37,7 +37,7 @@ class Game:
         # all about virus creation
         self.frame_counter = 0  # use for intervals when producing new virus
         self.virus_counter = 0  # used to measure player's progress
-        self.virus_avoided = 0  # equivalent to points earned during the game
+        self.viruses_avoided = 0  # equivalent to points earned during the game
         self.virus_frequency = FRAMES_BETWEEN_VIRUS_START
         self.superspreader = Superspreader()
 
@@ -63,6 +63,7 @@ class Game:
         self.all_sprites.add(self.health3)
 
         # set counters to 0 (important when restarting the game)
+        self.viruses_avoided = 0
         self.virus_counter = 0
         self.collision_virus = 0
         self.virus_frequency = FRAMES_BETWEEN_VIRUS_START
@@ -131,7 +132,7 @@ class Game:
             elif self.collision_virus == 3: #display_game_over hier aufrufen
                 pygame.sprite.Sprite.kill(self.health1)
                 print("you are  dead ")
-                #self.playing = False
+                self.end_game()  # for a clean end
                 s.display_game_over()
                 # TODO: end the game when 3 viruses are collected --> Merve
                 # bedingung für Aufruf der end seite --> bei 3 collision
@@ -139,9 +140,14 @@ class Game:
     # detect and kill escaped viruses with the help of points_counter sprite object
     def count_points(self):
         if pygame.sprite.spritecollide(self.points_counter, self.virus_group, True):
-            self.virus_avoided += 1
-            print("Viruses escaped: " + str(self.virus_avoided))
+            self.viruses_avoided += 1
+            print("Viruses escaped: " + str(self.viruses_avoided))
             print("Viruses in group: " + str(self.virus_group))
+
+    def end_game(self):
+        self.playing = False
+        for virus in self.virus_group:
+            virus.kill()
 
     def draw(self):  # game loop - draw
         self.WIN.fill(WHITE)  # RGB color for the window background, defined as constant
@@ -169,9 +175,10 @@ class Game:
         if stop_button.collidepoint(mx, my):
             if self.click:
                 self.click = False
-                # TODO: jump to start screen, virus should start on the right
-                pass
-                # s.display_main_menu()   # not correct yet, when pressing start the virus starts where you stopped the game, not at the beginning
+                # self.playing = False  - moved to end_game()
+                # TODO: jump to start screen, virus should start on the right DONE
+                self.end_game() # kills all virus objects produced so far
+                s.display_main_menu()   # not correct yet, when pressing start the virus starts where you stopped the game, not at the beginning
         if pause_button.collidepoint(mx, my):
             if self.click:
                 self.click = False
@@ -185,8 +192,8 @@ class Game:
         # das selbe gilt auch für den Game Over Screen
         # TODO: fix the virus counter DONE (Ula)
         # points = self.virus_counter-self.collision_virus-1
-        text = "Points: " + str(self.virus_avoided)
-        if self.virus_avoided < 0:      # damit points am Anfang nicht -1 sind
+        text = "Points: " + str(self.viruses_avoided)
+        if self.viruses_avoided < 0:      # damit points am Anfang nicht -1 sind
             Menu.draw_text(self, "Points: 0", pygame.font.Font(None, 50), BLACK, self.WIN, 400, 2 * MARGIN)
         else:
             Menu.draw_text(self, text, pygame.font.Font(None, 50), BLACK, self.WIN, 400, 2*MARGIN)
@@ -341,7 +348,7 @@ class Menu:
             self.draw_text("Play again", self.font_small, BLACK, self.WIN, 200, 250)
             self.draw_text("Quit", self.font_small, BLACK, self.WIN, 490, 250)
 
-            self.draw_text("Viruses avoided: " + str(g.virus_avoided), self.font_small, BLACK,
+            self.draw_text("Viruses avoided: " + str(g.viruses_avoided), self.font_small, BLACK,
                            self.WIN, 230, 350)
 
             if play_again_button.collidepoint(mx, my):
