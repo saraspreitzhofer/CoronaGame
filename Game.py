@@ -42,12 +42,11 @@ class Game:
         self.virus_frequency = FRAMES_BETWEEN_VIRUS_START
         self.superspreader = Superspreader()
 
-        # temp for mask TODO: remove
-        self.mask = Mask(7)
-        self.all_sprites.add(self.mask)
-
         # count collision -> virus
         self.collision_virus = 0
+
+        # protection
+        self.protected = False  # should be true for a certain period of time or frames after a mask has been collected
 
         # count points (virus reached the left screen border)
         self.points_counter = PointsCounter()
@@ -95,8 +94,8 @@ class Game:
             self.all_sprites.add(virus)  # add virus to sprites group
             self.virus_group.add(virus)
             self.virus_counter += 1
-            # test masks
-            mask = Mask(7)
+            # test masks TODO: improve intervals
+            mask = Mask(5)
             self.all_sprites.add(mask)
             self.mask_group.add(mask)
             self.frame_counter = 0
@@ -125,6 +124,7 @@ class Game:
             self.runner.jump()
         # pygame.time.delay(400)  # slows down everything!
         # detect collision
+        self.check_collision_with_mask()
         self.check_collision_with_virus()
         self.count_points()
 
@@ -146,6 +146,12 @@ class Game:
                 s.display_game_over()
                 # TODO: end the game when 3 viruses are collected --> Merve
                 # bedingung für Aufruf der end seite --> bei 3 collision
+
+    def check_collision_with_mask(self):
+        if pygame.sprite.spritecollide(self.runner, self.mask_group, True):
+            self.protected = True
+            print("you are wearing a mask now")
+            # todo: set timer and then set protection back to false
 
     def count_points(self): # detect and kill escaped viruses with the help of points_counter sprite object
         if pygame.sprite.spritecollide(self.points_counter, self.virus_group, True):
@@ -186,7 +192,7 @@ class Game:
                 self.click = False
                 # self.playing = False  - moved to end_game()
                 # TODO: jump to start screen, virus should start on the right DONE
-                self.end_game() # kills all virus objects produced so far
+                self.end_game()  # kills all virus objects produced so far
                 s.display_main_menu()   # not correct yet, when pressing start the virus starts where you stopped the game, not at the beginning
         if pause_button.collidepoint(mx, my):
             if self.click:
