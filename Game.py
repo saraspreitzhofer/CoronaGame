@@ -3,6 +3,7 @@ import sys
 import pygame
 import os  # to define path to the images
 
+from Mask import Mask
 from PointsCounter import PointsCounter
 from Superspreader import Superspreader
 from settings import *
@@ -29,6 +30,7 @@ class Game:
         # self.jumping = False  # ist jetzt in Klasse Runner
         self.all_sprites = pygame.sprite.Group()  # creates new empty group for all sprites
         self.virus_group = pygame.sprite.Group()
+        self.mask_group = pygame.sprite.Group()
 
         # create runner and add it to sprites group
         self.runner = Runner()
@@ -37,9 +39,12 @@ class Game:
         # all about virus creation
         self.frame_counter = 0  # use for intervals when producing new virus
         self.virus_counter = 0  # used to measure player's progress
-        self.viruses_avoided = 0  # equivalent to points earned during the game
         self.virus_frequency = FRAMES_BETWEEN_VIRUS_START
         self.superspreader = Superspreader()
+
+        # temp for mask TODO: remove
+        self.mask = Mask(7)
+        self.all_sprites.add(self.mask)
 
         # count collision -> virus
         self.collision_virus = 0
@@ -47,14 +52,16 @@ class Game:
         # count points (virus reached the left screen border)
         self.points_counter = PointsCounter()
         self.all_sprites.add(self.points_counter)
+        self.viruses_avoided = 0  # equivalent to points earned during the game
 
-        # create hearts and add them to sprites group
+        # heats for health
         self.health1 = None
         self.health2 = None
         self.health3 = None
 
     def new(self):  # start a new game
         # initialize health
+        # create hearts and add them to sprites group
         self.health1 = Health1()
         self.health2 = Health2()
         self.health3 = Health3()
@@ -87,14 +94,17 @@ class Game:
             virus = self.superspreader.produce_virus(7, 120, self)  # produce virus with velocity 7
             self.all_sprites.add(virus)  # add virus to sprites group
             self.virus_group.add(virus)
-            self.frame_counter = 0
             self.virus_counter += 1
+            # test masks
+            mask = Mask(7)
+            self.all_sprites.add(mask)
+            self.mask_group.add(mask)
+            self.frame_counter = 0
         self.all_sprites.update()
         pygame.display.update()  # update changes
         self.frame_counter += 1  # necessary for virus sprite production
 
     def events(self):  # game loop - events
-        self.game_over = False
         for event in pygame.event.get():  # loop through list of all different events
             if event.type == pygame.QUIT:
                 if self.playing:  # TODO: necessary?
@@ -137,14 +147,13 @@ class Game:
                 # TODO: end the game when 3 viruses are collected --> Merve
                 # bedingung für Aufruf der end seite --> bei 3 collision
 
-    # detect and kill escaped viruses with the help of points_counter sprite object
-    def count_points(self):
+    def count_points(self): # detect and kill escaped viruses with the help of points_counter sprite object
         if pygame.sprite.spritecollide(self.points_counter, self.virus_group, True):
             self.viruses_avoided += 1
             print("Viruses escaped: " + str(self.viruses_avoided))
             print("Viruses in group: " + str(self.virus_group))
 
-    def end_game(self):
+    def end_game(self): # kill all remaining game objects
         self.playing = False
         for virus in self.virus_group:
             virus.kill()
