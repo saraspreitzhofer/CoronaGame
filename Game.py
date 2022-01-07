@@ -31,6 +31,7 @@ class Game:
         self.all_sprites = pygame.sprite.Group()  # creates new empty group for all sprites
         self.virus_group = pygame.sprite.Group()
         self.mask_group = pygame.sprite.Group()
+        self.runner_group = pygame.sprite.Group()
 
         # create runner and add it to sprites group
         self.runner = None
@@ -102,6 +103,8 @@ class Game:
             self.all_sprites.add(mask)
             self.mask_group.add(mask)
             self.frame_counter = 0
+            #runner
+
         self.all_sprites.update()
         pygame.display.update()  # update changes
         self.frame_counter += 1  # necessary for virus sprite production
