@@ -53,7 +53,7 @@ class Runner(pygame.sprite.Sprite):  # Runner is a pygame Sprite object (Vererbu
             self.index = 0 # will be reseted
         else:
             self.image = self.sprites_running[self.index] #the image that will be displayed
-        clock.tick(70)
+        clock.tick(50)
 
     def jump(self):
         self.rect.y -= self.VELOCITY_JUMP
