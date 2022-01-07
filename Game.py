@@ -271,7 +271,7 @@ class Menu:
                            180 + 3 * MARGIN + 2 * BUTTON_HEIGHT)
             self.draw_text("?", self.font_small, BLACK, self.WIN, help_button.x + MARGIN, help_button.y + MARGIN)
             # display pictures
-            runner = pygame.transform.scale(pygame.image.load(os.path.join('assets', "runner.png")),
+            runner = pygame.transform.scale(pygame.image.load(os.path.join('assets/Runner', "runner3a.png")),
                                             (RUNNER_WIDTH * 1.5, RUNNER_HEIGHT * 1.5))
             small_virus = pygame.transform.scale(pygame.image.load(os.path.join('assets', "virus.png")),
                                                  (VIRUS_WIDTH, VIRUS_HEIGHT))
