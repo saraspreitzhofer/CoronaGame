@@ -32,7 +32,7 @@ class Superspreader:
             self.reduce_basis_frequency = 10
             self.virus_velocity += 3
             self.mask_velocity += 2  # masks are slower than viruses
-            if self.virus_velocity == 10:
+            if self.virus_velocity == 13:
                 game.level = 1
                 print("Level changed to 1!")
             #velocity += 5
