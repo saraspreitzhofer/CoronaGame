@@ -144,6 +144,27 @@ class Game:
             print(self.collision_virus)
             if self.collision_virus == 1:
                 pygame.sprite.Sprite.kill(self.health3)
+
+                self.runner.sprites_running = []
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner1_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner2_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner3_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner3a_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner4_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner5_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner6_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner7_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner8_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+
             elif self.collision_virus == 2:
                 pygame.sprite.Sprite.kill(self.health2)
 
