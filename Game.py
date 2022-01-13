@@ -14,7 +14,6 @@ from Health import Health1, Health2, Health3
 FPS = 60
 FramePerSec = pygame.time.Clock()
 
-
 class Game:
     def __init__(self):  # initialize game window etc
         self.game_over = None
@@ -37,10 +36,10 @@ class Game:
         self.runner = None
 
         # all about virus creation
-        self.frame_counter = 0  # use for intervals when producing new virus
-        self.virus_counter = 0  # used to measure player's progress
-        self.virus_frequency = FRAMES_BETWEEN_VIRUS_START
-        self.superspreader = Superspreader()
+        self.frame_counter = None  # use for intervals when producing new virus
+        self.virus_counter = None  # used to measure player's progress
+        self.virus_frequency = None
+        self.superspreader = None
 
         # count collision -> virus
         self.collision_virus = 0
@@ -78,6 +77,9 @@ class Game:
         self.collision_virus = 0
         self.virus_frequency = FRAMES_BETWEEN_VIRUS_START
 
+        self.frame_counter = 0  # use for intervals when producing new
+        self.superspreader = Superspreader()
+
         self.running = True
         self.playing = True
 
@@ -94,7 +96,7 @@ class Game:
     def update(self):  # game loop - update
         # virus sprite production depending on number of frames passed
         if self.frame_counter % self.virus_frequency == 0:
-            virus = self.superspreader.produce_virus(7, 120, self)  # produce virus with velocity 7
+            virus = self.superspreader.produce_virus(120, self)  # produce virus with velocity 7
             self.all_sprites.add(virus)  # add virus to sprites group
             self.virus_group.add(virus)
             self.virus_counter += 1
