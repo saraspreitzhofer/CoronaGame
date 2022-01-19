@@ -96,7 +96,7 @@ class Game:
         self.run()
 
     def run(self):  # code that handles main game loop in pygame
-        MUSIC.play(loops=-1)        # play in endless loop
+        MUSIC.play(loops=-1)  # play in endless loop
         while self.playing:  # game loop: open & close the window
             self.clock.tick(FPS)  # controls speed of the while loop
             self.events()
@@ -163,7 +163,7 @@ class Game:
 
             elif self.collision_virus == 2:
                 pygame.sprite.Sprite.kill(self.health2)
-                # make runner red
+                # make runner red when only 1 health is left
                 self.runner.sprites_running = []
                 self.runner.sprites_running.append(pygame.transform.scale(
                     pygame.image.load(os.path.join('assets/Runner_infected', 'runner1_infected.png')),
@@ -198,6 +198,8 @@ class Game:
                 print("you are  dead ")
                 self.end_game()  # for a clean end
                 s.display_game_over()
+                # todo: call display_name_screen(), Problem: Aufruf von s.display_game_over() in display_name_screen() beendet das Spiel
+                # s.display_name_screen()  # todo: only ask for name if highscore is achieved
 
     def check_collision_with_mask(self):
         if pygame.sprite.spritecollide(self.runner, self.mask_group, True):
@@ -397,6 +399,12 @@ class Menu:
         print("len virus_group: " + str(len(g.virus_group)))
         MUSIC.stop()
         GAME_OVER_SOUND.play()
+
+        # add points to highscore list
+        file = open("highscore.txt", "a")  # a = append at end of file
+        file.write(str(g.viruses_avoided)+"\n") # each entry is a new line
+        file.close()
+
         while self.running:
             # initialize text and buttons
             self.WIN.fill(WHITE)
@@ -434,10 +442,60 @@ class Menu:
 
             self.run()
 
+    def display_name_screen(self):
+        #MUSIC.stop()
+        #GAME_OVER_SOUND.play()
+
+        # add points to highscore list
+        #file = open("highscore.txt", "a")  # a = append at end of file
+        #file.write(str(g.viruses_avoided) + "\n")  # each entry is a new line
+        #file.close()
+
+        while self.running:
+            # initialize text and buttons
+            self.WIN.fill(WHITE)
+            mx, my = pygame.mouse.get_pos()
+            ok_button = pygame.Rect(WIDTH / 2 - BUTTON_WIDTH * 0.4 / 2, 180 + 2 * MARGIN + 2 * BUTTON_HEIGHT,
+                                    BUTTON_WIDTH * 0.4, BUTTON_HEIGHT)
+            user_input = pygame.Rect(450, 240, BUTTON_WIDTH, BUTTON_HEIGHT)
+            pygame.draw.rect(self.WIN, GREY, ok_button)
+            pygame.draw.rect(self.WIN, GREY, user_input)
+            self.draw_text("Ooops! You are dead :/", self.font_big, BLACK, self.WIN, 60, 40)
+            self.draw_text("Viruses avoided: " + str(g.viruses_avoided), self.font_small, BLACK,
+                           self.WIN, 250, 130)
+            self.draw_text("Your name: ", self.font_small, BLACK, self.WIN, 200, 250)
+            self.draw_text("OK", self.font_small, BLACK, self.WIN, ok_button.x + MARGIN, ok_button.y + MARGIN)
+
+            if ok_button.collidepoint(mx, my):
+                if self.click:
+                    s.display_game_over()   # todo: Problem: Aufruf beendet das Spiel, warum??
+
+            if user_input.collidepoint(mx, my):
+                if self.click:
+                    pass
+                    # todo: ask for user input
+                    # todo: add user input to highscore file
+
+            self.run()
+
     def display_high_score(self):
+        # get highscore list
+        file = open("highscore.txt", "r")  # read from file
+        lines = file.readlines()  # create list
+        lines.sort(reverse=True)  # sort list in descending order
+        print(lines)
+        highscore = lines[0]
+        highscore2 = lines[1]
+        highscore3 = lines[2]
+        file.close()
+
         while self.running:
             self.WIN.fill(WHITE)
             mx, my = pygame.mouse.get_pos()
+            self.draw_text("High Score", self.font_big, BLACK, self.WIN, 220, 80)
+            self.draw_text(highscore, self.font_small, BLACK, self.WIN, 400, 200)  # todo: remove linebreak from output
+            self.draw_text(highscore2, self.font_small, BLACK, self.WIN, 400, 250)
+            self.draw_text(highscore3, self.font_small, BLACK, self.WIN, 400, 300)
             back_button = pygame.Rect(MARGIN, HEIGHT - MARGIN - BUTTON_HEIGHT, BUTTON_WIDTH * 0.75, BUTTON_HEIGHT)
             pygame.draw.rect(self.WIN, GREY, back_button)
             self.draw_text("<-- Back", self.font_small, BLACK, self.WIN, 2 * MARGIN, HEIGHT - BUTTON_HEIGHT)
