@@ -44,6 +44,7 @@ REDUCE_FRAMES_BETWEEN_VIRUS = 20
 GAME_OVER_SOUND = pygame.mixer.Sound(os.path.join('assets', 'zapsplat_game_over.mp3'))
 COLLISION_SOUND = pygame.mixer.Sound(os.path.join('assets', 'zapsplat_cough.mp3'))
 JUMP_SOUND = pygame.mixer.Sound(os.path.join('assets', 'zapsplat_jump.mp3'))
+MUSIC = pygame.mixer.Sound(os.path.join('assets', 'zapsplat_game_music.mp3'))
 
 
 

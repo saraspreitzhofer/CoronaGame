@@ -14,6 +14,7 @@ from Health import Health1, Health2, Health3
 FPS = 60
 FramePerSec = pygame.time.Clock()
 
+
 class Game:
     def __init__(self):  # initialize game window etc
         self.game_over = None
@@ -36,12 +37,11 @@ class Game:
         self.runner = None
 
         # all about virus creation
-        self.superspreader = None # use to produce virus and mask sprites
+        self.superspreader = None  # use to produce virus and mask sprites
         self.frame_counter = None  # use for intervals when producing new objects
         self.virus_counter = None  # used to measure player's progress TODO: brauchma den noch?
         self.virus_frequency = None
         self.mask_frequency = None
-
 
         # count collision -> virus
         self.collision_virus = 0
@@ -96,6 +96,7 @@ class Game:
         self.run()
 
     def run(self):  # code that handles main game loop in pygame
+        MUSIC.play(loops=-1)        # play in endless loop
         while self.playing:  # game loop: open & close the window
             self.clock.tick(FPS)  # controls speed of the while loop
             self.events()
@@ -104,7 +105,7 @@ class Game:
 
     def update(self):  # game loop - update
         # virus sprite production depending on number of frames passed
-        if self.virus_frequency == 0:  #self.frame_counter % self.virus_frequency == 0:
+        if self.virus_frequency == 0:  # self.frame_counter % self.virus_frequency == 0:
             virus = self.superspreader.produce_virus(120, self)  # produce virus with velocity 7
             self.all_sprites.add(virus)  # add virus to sprites group
             self.virus_group.add(virus)
@@ -113,13 +114,13 @@ class Game:
             self.frame_counter = 0  # TODO: stattdessen einfach nur virusfrequency runterzählen und reagieren, wenn 0?
 
         if self.level > 0:
-            if self.mask_frequency == 0: #self.level > 0 and self.virus_counter % 3 == 0:  # TODO: nicht fertig! besser: setz eigene mask frequency un dzähl die runter
+            if self.mask_frequency == 0:  # self.level > 0 and self.virus_counter % 3 == 0:  # TODO: nicht fertig! besser: setz eigene mask frequency un dzähl die runter
                 mask = self.superspreader.produce_mask(self)
                 self.all_sprites.add(mask)
                 self.mask_group.add(mask)
             self.mask_frequency -= 1  # TODO: experimentierstadium - lassen?
             # TODO: reset mask frequency in superspreader
-            #runner
+            # runner
 
         self.all_sprites.update()
         pygame.display.update()  # update changes
@@ -160,28 +161,37 @@ class Game:
             if self.collision_virus == 1:
                 pygame.sprite.Sprite.kill(self.health3)
 
-                self.runner.sprites_running = []
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner1_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner2_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner3_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner3a_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner4_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner5_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner6_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner7_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner8_infected.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
-
             elif self.collision_virus == 2:
                 pygame.sprite.Sprite.kill(self.health2)
+                # make runner red
+                self.runner.sprites_running = []
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner1_infected.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner2_infected.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner3_infected.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner3a_infected.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner4_infected.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner5_infected.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner6_infected.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner7_infected.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner8_infected.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
 
             elif self.collision_virus == 3:  # display_game_over hier aufrufen
                 pygame.sprite.Sprite.kill(self.health1)
@@ -286,6 +296,7 @@ class Menu:
 
     def display_main_menu(self):
         while self.running:
+            if MUSIC.play(): MUSIC.stop()
             self.WIN.fill(WHITE)
             mx, my = pygame.mouse.get_pos()
             # create buttons
@@ -331,7 +342,7 @@ class Menu:
                     sys.exit()
             if highscore_button.collidepoint(mx, my):
                 if self.click:
-                    # TODO: display highscores
+                    s.display_high_score()
                     pass
             if help_button.collidepoint(mx, my):
                 if self.click:
@@ -365,6 +376,7 @@ class Menu:
 
     def display_pause_screen(self):
         while self.running:
+            pygame.mixer.pause()
             self.WIN.fill(WHITE)
             mx, my = pygame.mouse.get_pos()
             continue_button = pygame.Rect(WIDTH / 2 - BUTTON_WIDTH / 2, HEIGHT / 2 - BUTTON_HEIGHT / 2, BUTTON_WIDTH,
@@ -379,9 +391,11 @@ class Menu:
                     g.pause = False
                     break
             self.run()
+        pygame.mixer.unpause()
 
     def display_game_over(self):
         print("len virus_group: " + str(len(g.virus_group)))
+        MUSIC.stop()
         GAME_OVER_SOUND.play()
         while self.running:
             # initialize text and buttons
@@ -417,6 +431,21 @@ class Menu:
                 if self.click:
                     self.click = False
                     self.display_main_menu()
+
+            self.run()
+
+    def display_high_score(self):
+        while self.running:
+            self.WIN.fill(WHITE)
+            mx, my = pygame.mouse.get_pos()
+            back_button = pygame.Rect(MARGIN, HEIGHT - MARGIN - BUTTON_HEIGHT, BUTTON_WIDTH * 0.75, BUTTON_HEIGHT)
+            pygame.draw.rect(self.WIN, GREY, back_button)
+            self.draw_text("<-- Back", self.font_small, BLACK, self.WIN, 2 * MARGIN, HEIGHT - BUTTON_HEIGHT)
+
+            if back_button.collidepoint((mx, my)):
+                if self.click:
+                    self.click = False
+                    s.display_main_menu()
 
             self.run()
 
