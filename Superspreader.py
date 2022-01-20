@@ -56,6 +56,7 @@ class Superspreader:
         virus = Virus(self.virus_velocity)
         return virus
 
+
     def produce_mask(self, game):
         if game.level == 1:
             game.mask_frequency = MASK_FREQUENCY_FRAMES_START

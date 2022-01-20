@@ -32,7 +32,6 @@ BUTTON3 = WIDTH / 2 - BUTTON_WIDTH / 2, 180 + 2 * MARGIN + 2 * BUTTON_HEIGHT, BU
 
 RADIUS = 30
 
-
 ROTATEBY_VIRUS = 5
 
 # frequency settings

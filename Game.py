@@ -123,6 +123,7 @@ class Game:
             self.level += 1
             print("changed level to: " + str(self.level))
 
+
         # mask production
         if self.level > 0:
             if self.mask_frequency == 0:  # self.level > 0 and self.virus_counter % 3 == 0:
