@@ -48,6 +48,7 @@ class Game:
 
         # protection
         self.protected = False  # should be true for a certain period of time or frames after a mask has been collected
+        self.protection_timer = None # count down when protected
 
         # count points (virus reached the left screen border)
         self.points_counter = None
@@ -79,6 +80,10 @@ class Game:
         self.all_sprites.add(self.health1)
         self.all_sprites.add(self.health2)
         self.all_sprites.add(self.health3)
+
+        # protection
+        self.protected = False  # should be true for a certain period of time or frames after a mask has been collected
+        self.protection_timer = 0  # count down when protected
 
         # set counters to 0 (important when restarting the game)
         self.viruses_avoided = 0
@@ -118,15 +123,18 @@ class Game:
             #self.frame_counter = 0 nicht mehr verwendet
 
         # increase level according to nr of produced viruses
-        if self.virus_counter % 10 == 0:  # TODO: move modulus to settings?
+        if self.virus_counter % 4 == 0:  # TODO: move modulus to settings?
             self.virus_counter = 1  # reset to 1 to prevent level from increasing with every frame
             self.level += 1
             print("changed level to: " + str(self.level))
+
+        # count down protection timer
         if self.protected is True:
             self.protection_timer -= 1
+            #print("protection timer: " + str(self.protection_timer))
             if self.protection_timer == 0:
                 self.protected = False
-
+                print("end of protection")
 
         # mask production
         if self.level > 0:
@@ -443,7 +451,7 @@ class Menu:
         pygame.mixer.unpause()
 
     def display_game_over(self):
-        print("len virus_group: " + str(len(g.virus_group)))
+        #print("len virus_group: " + str(len(g.virus_group)))
         MUSIC.stop()
         GAME_OVER_SOUND.play()
 
