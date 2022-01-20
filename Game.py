@@ -193,8 +193,6 @@ class Game:
                 pygame.sprite.Sprite.kill(self.health1)
                 print("you are  dead ")
                 self.end_game()  # for a clean end
-                #s.display_game_over()
-                # todo: call display_name_screen(), Problem: Aufruf von s.display_game_over() in display_name_screen() beendet das Spiel
                 s.display_name_screen()  # todo: only ask for name if highscore is achieved
 
     def check_collision_with_mask(self):
@@ -275,6 +273,7 @@ class Menu:
         self.font_small = pygame.font.Font(None, 60)
         self.font_big = pygame.font.Font(None, 100)
         self.click = False
+        user_name = ''
 
     def run(self):
         self.click = False
@@ -401,10 +400,42 @@ class Menu:
             self.run()
         pygame.mixer.unpause()
 
-    def display_game_over(self):
+    def display_name_screen(self):
         MUSIC.stop()
         GAME_OVER_SOUND.play()
 
+        while self.running:
+            # initialize text and buttons
+            self.WIN.fill(WHITE)
+            mx, my = pygame.mouse.get_pos()
+            ok_button = pygame.Rect(WIDTH / 2 - BUTTON_WIDTH * 0.4 / 2, 180 + 2 * MARGIN + 2 * BUTTON_HEIGHT,
+                                    BUTTON_WIDTH * 0.4, BUTTON_HEIGHT)
+            user_input = pygame.Rect(450, 240, BUTTON_WIDTH, BUTTON_HEIGHT)
+            pygame.draw.rect(self.WIN, GREY, ok_button)
+            pygame.draw.rect(self.WIN, GREY, user_input)
+            self.draw_text("Ooops! You are dead :/", self.font_big, BLACK, self.WIN, 60, 40)
+            self.draw_text("Viruses avoided: " + str(g.points), self.font_small, BLACK,
+                           self.WIN, 250, 130)
+            self.draw_text("Your name: ", self.font_small, BLACK, self.WIN, 200, 250)
+            self.draw_text("OK", self.font_small, BLACK, self.WIN, ok_button.x + MARGIN, ok_button.y + MARGIN)
+
+            if ok_button.collidepoint(mx, my):
+                if self.click:
+                    self.click = False
+                    s.display_game_over()
+
+            if user_input.collidepoint(mx, my):
+                if self.click:
+                    self.click = False
+                    for event in pygame.event.get():  # loop through list of all different events
+                        if event.type == pygame.KEYDOWN:    # get user input
+                            pass
+                    # todo: ask for user input
+                    # todo: add user input to highscore file
+
+            self.run()
+
+    def display_game_over(self):
         # add points to highscore list
         file = open("highscore.txt", "a")  # a = append at end of file
         file.write(str(g.points) + "\n")  # each entry is a new line
@@ -448,43 +479,6 @@ class Menu:
 
             self.run()
 
-    def display_name_screen(self):
-        MUSIC.stop()
-        GAME_OVER_SOUND.play()
-
-        # add points to highscore list
-        #file = open("highscore.txt", "a")  # a = append at end of file
-        #file.write(str(g.viruses_avoided) + "\n")  # each entry is a new line
-        #file.close()
-
-        while self.running:
-            # initialize text and buttons
-            self.WIN.fill(WHITE)
-            mx, my = pygame.mouse.get_pos()
-            ok_button = pygame.Rect(WIDTH / 2 - BUTTON_WIDTH * 0.4 / 2, 180 + 2 * MARGIN + 2 * BUTTON_HEIGHT,
-                                    BUTTON_WIDTH * 0.4, BUTTON_HEIGHT)
-            user_input = pygame.Rect(450, 240, BUTTON_WIDTH, BUTTON_HEIGHT)
-            pygame.draw.rect(self.WIN, GREY, ok_button)
-            pygame.draw.rect(self.WIN, GREY, user_input)
-            self.draw_text("Ooops! You are dead :/", self.font_big, BLACK, self.WIN, 60, 40)
-            self.draw_text("Viruses avoided: " + str(g.points), self.font_small, BLACK,
-                           self.WIN, 250, 130)
-            self.draw_text("Your name: ", self.font_small, BLACK, self.WIN, 200, 250)
-            self.draw_text("OK", self.font_small, BLACK, self.WIN, ok_button.x + MARGIN, ok_button.y + MARGIN)
-
-            if ok_button.collidepoint(mx, my):
-                if self.click:
-                    self.click = False
-                    s.display_game_over()   # todo: Problem: Aufruf beendet das Spiel, warum??
-
-            if user_input.collidepoint(mx, my):
-                if self.click:
-                    pass
-                    # todo: ask for user input
-                    # todo: add user input to highscore file
-
-            self.run()
-
     def display_high_score(self):
         # get highscore list
         file = open("highscore.txt", "r")  # read from file
@@ -503,7 +497,7 @@ class Menu:
             self.WIN.fill(WHITE)
             mx, my = pygame.mouse.get_pos()
             self.draw_text("High Score", self.font_big, BLACK, self.WIN, 220, 80)
-            self.draw_text(highscore[:l-1], self.font_small, BLACK, self.WIN, 400, 200)  # todo: remove linebreak from output
+            self.draw_text(highscore[:l-1], self.font_small, BLACK, self.WIN, 400, 200)
             self.draw_text(highscore2[:l2-1], self.font_small, BLACK, self.WIN, 400, 250)
             self.draw_text(highscore3[:l3-1], self.font_small, BLACK, self.WIN, 400, 300)
             back_button = pygame.Rect(MARGIN, HEIGHT - MARGIN - BUTTON_HEIGHT, BUTTON_WIDTH * 0.75, BUTTON_HEIGHT)
