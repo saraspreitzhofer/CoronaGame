@@ -411,7 +411,7 @@ class Menu:
             pygame.draw.rect(self.WIN, GREY, play_again_button)
             pygame.draw.rect(self.WIN, GREY, main_menu_button)
             pygame.draw.rect(self.WIN, GREY, quit_button)
-            self.draw_text("Ooops! You are dead :/", self.font_big, BLACK, self.WIN, 60, 40)
+            self.draw_text("You are still dead :/", self.font_big, BLACK, self.WIN, 150, 40)
             self.draw_text("Play again", self.font_small, BLACK, self.WIN, play_again_button.x + MARGIN,
                            play_again_button.y + MARGIN)
             self.draw_text("Main Menu", self.font_small, BLACK, self.WIN, main_menu_button.x + MARGIN,
