@@ -134,6 +134,7 @@ class Game:
             #print("protection timer: " + str(self.protection_timer))
             if self.protection_timer == 0:
                 self.protected = False
+                self.runner.runner_set_normal()
                 print("end of protection")
 
         # mask production
@@ -185,35 +186,7 @@ class Game:
 
             elif self.collision_virus == 2:
                 pygame.sprite.Sprite.kill(self.health2)
-                # make runner red when only 1 health is left
-                self.runner.sprites_running = []
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner1_infected.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner2_infected.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner3_infected.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner3a_infected.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner4_infected.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner5_infected.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner6_infected.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner7_infected.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_infected', 'runner8_infected.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.runner_set_almost_dead()  # make runner red when only 1 health is left
 
             elif self.collision_virus == 3:  # display_game_over hier aufrufen
                 pygame.sprite.Sprite.kill(self.health1)
@@ -225,41 +198,11 @@ class Game:
 
     def check_collision_with_mask(self):
         if pygame.sprite.spritecollide(self.runner, self.mask_group, True):
+            self.runner.runner_set_protected()
             self.protected = True
             self.protection_timer = 100
-            if self.protected is True:
-                self.runner.sprites_running = [] # funktioniert noch nicht ganz
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner1_mask.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner2_mask.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner3_mask.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner3a_mask.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner4_mask.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner5_mask.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner1_mask.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner7_mask.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
-                self.runner.sprites_running.append(pygame.transform.scale(
-                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner8_mask.png')),
-                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
-
             print("you are wearing a mask now")
-
-            print(self.protection_timer)
+            #print(self.protection_timer)
             # todo: set timer and then set protection back to false
 
     def count_points(self):  # detect and kill escaped viruses with the help of points_counter sprite object

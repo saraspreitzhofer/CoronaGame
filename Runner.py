@@ -61,3 +61,84 @@ class Runner(pygame.sprite.Sprite):  # Runner is a pygame Sprite object (Vererbu
         if self.VELOCITY_JUMP < -20:
             self.jumping = False
             self.VELOCITY_JUMP = 20
+
+    def runner_set_normal(self):
+            self.sprites_running = []
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner', 'runner1.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner', 'runner2.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner', 'runner3.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner', 'runner3a.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner', 'runner4.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner', 'runner5.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner', 'runner6.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner', 'runner7.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner', 'runner8.png')), (RUNNER_WIDTH, RUNNER_HEIGHT)))
+
+    def runner_set_protected(self):
+            self.sprites_running = []  # funktioniert noch nicht ganz
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner_mask', 'runner1_mask.png')),
+                (RUNNER_WIDTH, RUNNER_HEIGHT)))
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner_mask', 'runner2_mask.png')),
+                (RUNNER_WIDTH, RUNNER_HEIGHT)))
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner_mask', 'runner3_mask.png')),
+                (RUNNER_WIDTH, RUNNER_HEIGHT)))
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner_mask', 'runner3a_mask.png')),
+                (RUNNER_WIDTH, RUNNER_HEIGHT)))
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner_mask', 'runner4_mask.png')),
+                (RUNNER_WIDTH, RUNNER_HEIGHT)))
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner_mask', 'runner5_mask.png')),
+                (RUNNER_WIDTH, RUNNER_HEIGHT)))
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner_mask', 'runner1_mask.png')),
+                (RUNNER_WIDTH, RUNNER_HEIGHT)))
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner_mask', 'runner7_mask.png')),
+                (RUNNER_WIDTH, RUNNER_HEIGHT)))
+            self.sprites_running.append(pygame.transform.scale(
+                pygame.image.load(os.path.join('assets/Runner_mask', 'runner8_mask.png')),
+                (RUNNER_WIDTH, RUNNER_HEIGHT)))
+
+    def runner_set_almost_dead(self):
+        self.sprites_running = []
+        self.sprites_running.append(pygame.transform.scale(
+            pygame.image.load(os.path.join('assets/Runner_infected', 'runner1_infected.png')),
+            (RUNNER_WIDTH, RUNNER_HEIGHT)))
+        self.sprites_running.append(pygame.transform.scale(
+            pygame.image.load(os.path.join('assets/Runner_infected', 'runner2_infected.png')),
+            (RUNNER_WIDTH, RUNNER_HEIGHT)))
+        self.sprites_running.append(pygame.transform.scale(
+            pygame.image.load(os.path.join('assets/Runner_infected', 'runner3_infected.png')),
+            (RUNNER_WIDTH, RUNNER_HEIGHT)))
+        self.sprites_running.append(pygame.transform.scale(
+            pygame.image.load(os.path.join('assets/Runner_infected', 'runner3a_infected.png')),
+            (RUNNER_WIDTH, RUNNER_HEIGHT)))
+        self.sprites_running.append(pygame.transform.scale(
+            pygame.image.load(os.path.join('assets/Runner_infected', 'runner4_infected.png')),
+            (RUNNER_WIDTH, RUNNER_HEIGHT)))
+        self.sprites_running.append(pygame.transform.scale(
+            pygame.image.load(os.path.join('assets/Runner_infected', 'runner5_infected.png')),
+            (RUNNER_WIDTH, RUNNER_HEIGHT)))
+        self.sprites_running.append(pygame.transform.scale(
+            pygame.image.load(os.path.join('assets/Runner_infected', 'runner6_infected.png')),
+            (RUNNER_WIDTH, RUNNER_HEIGHT)))
+        self.sprites_running.append(pygame.transform.scale(
+            pygame.image.load(os.path.join('assets/Runner_infected', 'runner7_infected.png')),
+            (RUNNER_WIDTH, RUNNER_HEIGHT)))
+        self.sprites_running.append(pygame.transform.scale(
+            pygame.image.load(os.path.join('assets/Runner_infected', 'runner8_infected.png')),
+            (RUNNER_WIDTH, RUNNER_HEIGHT)))
