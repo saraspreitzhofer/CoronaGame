@@ -52,7 +52,7 @@ class Game:
 
         # count points (virus reached the left screen border)
         self.points_counter = None
-        self.viruses_avoided = None  # equivalent to points earned during the game
+        self.points = None  # equivalent to points earned during the game
 
         # heats for health
         self.health1 = None
@@ -70,7 +70,7 @@ class Game:
         # initialize PointsCounter and points
         self.points_counter = PointsCounter()
         self.all_sprites.add(self.points_counter)
-        self.viruses_avoided = 0  # equivalent to points earned during the game
+        self.points = 0  # points earned during the game
 
         # initialize health
         # create hearts and add them to sprites group
@@ -86,7 +86,7 @@ class Game:
         self.protection_timer = 0  # count down when protected
 
         # set counters to 0 (important when restarting the game)
-        self.viruses_avoided = 0
+        self.points = 0
         self.virus_counter = 0
         self.collision_virus = 0
         self.virus_frequency = 0
@@ -199,6 +199,7 @@ class Game:
 
     def check_collision_with_mask(self):
         if pygame.sprite.spritecollide(self.runner, self.mask_group, True):
+            self.points += 5 # player earns 5 points for each mask
             self.runner.runner_set_protected()
             self.protected = True
             self.protection_timer = 100
@@ -206,8 +207,8 @@ class Game:
 
     def count_points(self):  # detect and kill escaped viruses with the help of points_counter sprite object
         if pygame.sprite.spritecollide(self.points_counter, self.virus_group, True):
-            self.viruses_avoided += 1
-            print("Viruses escaped: " + str(self.viruses_avoided))
+            self.points += 1
+            print("Viruses escaped: " + str(self.points))
             print("Viruses in group: " + str(self.virus_group))
 
     def end_game(self):  # kill all remaining game objects
@@ -252,7 +253,7 @@ class Game:
                     s.display_pause_screen()
 
         # display points during the game
-        text = "Points: " + str(self.viruses_avoided)
+        text = "Points: " + str(self.points)
         Menu.draw_text(self, text, pygame.font.Font(None, 50), BLACK, self.WIN, 400, 2 * MARGIN)
 
     # def show_start_screen(self):  # game splash / start screen
@@ -398,7 +399,7 @@ class Menu:
 
         # add points to highscore list
         file = open("highscore.txt", "a")  # a = append at end of file
-        file.write(str(g.viruses_avoided)+"\n")  # each entry is a new line
+        file.write(str(g.points) + "\n")  # each entry is a new line
         file.close()
 
         while self.running:
@@ -418,7 +419,7 @@ class Menu:
                            main_menu_button.y + MARGIN)
             self.draw_text("Quit", self.font_small, BLACK, self.WIN, quit_button.x + MARGIN, quit_button.y + MARGIN)
 
-            self.draw_text("Viruses avoided: " + str(g.viruses_avoided), self.font_small, BLACK,
+            self.draw_text("Viruses avoided: " + str(g.points), self.font_small, BLACK,
                            self.WIN, 250, 130)
 
             if play_again_button.collidepoint(mx, my):
@@ -458,7 +459,7 @@ class Menu:
             pygame.draw.rect(self.WIN, GREY, ok_button)
             pygame.draw.rect(self.WIN, GREY, user_input)
             self.draw_text("Ooops! You are dead :/", self.font_big, BLACK, self.WIN, 60, 40)
-            self.draw_text("Viruses avoided: " + str(g.viruses_avoided), self.font_small, BLACK,
+            self.draw_text("Viruses avoided: " + str(g.points), self.font_small, BLACK,
                            self.WIN, 250, 130)
             self.draw_text("Your name: ", self.font_small, BLACK, self.WIN, 200, 250)
             self.draw_text("OK", self.font_small, BLACK, self.WIN, ok_button.x + MARGIN, ok_button.y + MARGIN)
