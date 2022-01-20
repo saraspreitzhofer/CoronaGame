@@ -27,7 +27,7 @@ class Game:
         self.playing = True
         self.pause = False
         self.click = False
-        # self.jumping = False  # ist jetzt in Klasse Runner
+
         self.all_sprites = pygame.sprite.Group()  # creates new empty group for all sprites
         self.virus_group = pygame.sprite.Group()
         self.mask_group = pygame.sprite.Group()
@@ -143,11 +143,11 @@ class Game:
                 mask = self.superspreader.produce_mask(self)
                 self.all_sprites.add(mask)
                 self.mask_group.add(mask)
-            self.mask_frequency -= 1
+            self.mask_frequency -= 1  # count down interval between viruses
 
+        # update sprites
         self.all_sprites.update()
         pygame.display.update()  # update changes
-        #self.frame_counter += 1  # necessary for virus sprite production
         self.virus_frequency -= 1
 
     def events(self):  # game loop - events
@@ -161,23 +161,24 @@ class Game:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     self.click = True
-            # if self.jumping is False and event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            #    self.jumping = True
         user_input = pygame.key.get_pressed()  # list of currently pressed key(s)
         if self.runner.jumping is False and user_input[pygame.K_SPACE]:
             self.runner.jumping = True
             JUMP_SOUND.play()  # muss an diese Stelle, überall anders wird der Ton verzerrt
         if self.runner.jumping:
             self.runner.jump()
-        # pygame.time.delay(400)  # slows down everything!
-        # detect collision
+
+        # detect collisions
         self.check_collision_with_mask()
         self.check_collision_with_virus()
         self.count_points()
 
-    def check_collision_with_virus(self):  # improve health decrease & collision detection
+    # collision with viruses
+    # decrease health
+    # end game
+    def check_collision_with_virus(self):
         if pygame.sprite.spritecollide(self.runner, self.virus_group,
-                                       True) and self.protected is False:  # self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
+                                       True) and self.protected is False:
             self.collision_virus += 1
             COLLISION_SOUND.play()
             print(self.collision_virus)
@@ -192,9 +193,9 @@ class Game:
                 pygame.sprite.Sprite.kill(self.health1)
                 print("you are  dead ")
                 self.end_game()  # for a clean end
-                s.display_game_over()
+                #s.display_game_over()
                 # todo: call display_name_screen(), Problem: Aufruf von s.display_game_over() in display_name_screen() beendet das Spiel
-                #s.display_name_screen()  # todo: only ask for name if highscore is achieved
+                s.display_name_screen()  # todo: only ask for name if highscore is achieved
 
     def check_collision_with_mask(self):
         if pygame.sprite.spritecollide(self.runner, self.mask_group, True):
@@ -202,8 +203,6 @@ class Game:
             self.protected = True
             self.protection_timer = 100
             print("you are wearing a mask now")
-            #print(self.protection_timer)
-            # todo: set timer and then set protection back to false
 
     def count_points(self):  # detect and kill escaped viruses with the help of points_counter sprite object
         if pygame.sprite.spritecollide(self.points_counter, self.virus_group, True):
@@ -394,13 +393,12 @@ class Menu:
         pygame.mixer.unpause()
 
     def display_game_over(self):
-        #print("len virus_group: " + str(len(g.virus_group)))
         MUSIC.stop()
         GAME_OVER_SOUND.play()
 
         # add points to highscore list
         file = open("highscore.txt", "a")  # a = append at end of file
-        file.write(str(g.viruses_avoided)+"\n") # each entry is a new line
+        file.write(str(g.viruses_avoided)+"\n")  # each entry is a new line
         file.close()
 
         while self.running:
@@ -430,6 +428,7 @@ class Menu:
 
             if quit_button.collidepoint(mx, my):
                 if self.click:
+                    print("quit button clicked")
                     pygame.quit()
                     sys.exit()
 
@@ -466,6 +465,7 @@ class Menu:
 
             if ok_button.collidepoint(mx, my):
                 if self.click:
+                    self.click = False
                     s.display_game_over()   # todo: Problem: Aufruf beendet das Spiel, warum??
 
             if user_input.collidepoint(mx, my):
