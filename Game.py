@@ -271,7 +271,7 @@ class Menu:
         pygame.display.set_caption(TITLE_START)  # window title
         self.running = True
         self.clock = pygame.time.Clock()
-        self.font_very_small = pygame.font.Font(None, 40)
+        self.font_very_small = pygame.font.Font(None, 25)
         self.font_small = pygame.font.Font(None, 60)
         self.font_big = pygame.font.Font(None, 100)
         self.click = False
@@ -358,14 +358,18 @@ class Menu:
             self.draw_text("<-- Back", self.font_small, BLACK, self.WIN, 2 * MARGIN, HEIGHT - BUTTON_HEIGHT)
             self.draw_text("Corona Game", self.font_big, BLACK, self.WIN, 220, 80)
             # jede Zeile in einen Befehl, falls jemand eine bessere Lösung hat bitte ändern
-            self.draw_text("Anleitung Bla Bla alsdjf aslkd föalskd falsdk lasd fklasd asd",
+            self.draw_text("The player needs to dodge virus obstacles by jumping over them.",
                            self.font_very_small, BLACK, self.WIN, 2 * MARGIN, 180)
-            self.draw_text("fj aölksdjf asklöd jfaöksldf jalskd föasldkf asdk fjasdklöf ",
-                           self.font_very_small, BLACK, self.WIN, 2 * MARGIN, 230)
-            self.draw_text("fj aölksdjf asklöd jfaöksldf jalskd föasldkf asdk fjasdklöf ",
-                           self.font_very_small, BLACK, self.WIN, 2 * MARGIN, 280)
-            self.draw_text("ycxjkv lykjsdflkwajerf klyxcnvpoid",
-                           self.font_very_small, BLACK, self.WIN, 2 * MARGIN, 330)
+            self.draw_text("To jump, the player has to press ""-SPACE KEY-""",
+                           self.font_very_small, BLACK, self.WIN, 2 * MARGIN, 220)
+            self.draw_text("If the player dodges the obstacles, the player earns points and the game continues. ",
+                           self.font_very_small, BLACK, self.WIN, 2 * MARGIN, 260)
+            self.draw_text("If you can not dodge you get infected and lose a health. After three infections, the game is lost.",
+                           self.font_very_small, BLACK, self.WIN, 2 * MARGIN, 300)
+            self.draw_text("Masks can be collected to temporal protection against virus infection.",
+                            self.font_very_small, BLACK, self.WIN, 2 * MARGIN, 340)
+            self.draw_text("As long as a player wears a mask, the player don not have to dodge the virus obstacle.",
+                            self.font_very_small, BLACK, self.WIN, 2 * MARGIN, 380)
 
             if back_button.collidepoint((mx, my)):
                 if self.click:
