@@ -273,7 +273,11 @@ class Menu:
         self.font_small = pygame.font.Font(None, 60)
         self.font_big = pygame.font.Font(None, 100)
         self.click = False
-        user_name = ''
+        self.user_name = ""
+        self.lines = []
+        self.highscore = "0"
+        self.highscore2 = "0"
+        self.highscore3 = "0"
 
     def run(self):
         self.click = False
@@ -438,7 +442,7 @@ class Menu:
     def display_game_over(self):
         # add points to highscore list
         file = open("highscore.txt", "a")  # a = append at end of file
-        file.write(str(g.points) + "\n")  # each entry is a new line
+        file.write(str(g.points) + " " + self.user_name + "\n")  # each entry is a new line
         file.close()
 
         while self.running:
@@ -482,15 +486,15 @@ class Menu:
     def display_high_score(self):
         # get highscore list
         file = open("highscore.txt", "r")  # read from file
-        lines = file.readlines()  # create list
-        lines.sort(reverse=True)  # sort list in descending order
-        print(lines)
-        highscore = lines[0]
-        highscore2 = lines[1]
-        highscore3 = lines[2]
-        l = len(highscore)
-        l2 = len(highscore2)
-        l3 = len(highscore3)
+        self.lines = file.readlines()  # create list
+        self.lines.sort(reverse=True)  # sort list in descending order
+        print(self.lines)
+        self.highscore = self.lines[0]
+        self.highscore2 = self.lines[1]
+        self.highscore3 = self.lines[2]
+        l = len(self.highscore)
+        l2 = len(self.highscore2)
+        l3 = len(self.highscore3)
         file.close()
 
         while self.running:
@@ -498,9 +502,9 @@ class Menu:
             mx, my = pygame.mouse.get_pos()
             button_width = BUTTON_WIDTH * 0.5
             self.draw_text("High Score", self.font_big, BLACK, self.WIN, 220, 80)
-            self.draw_text(highscore[:l-1], self.font_small, BLACK, self.WIN, 400, 200)
-            self.draw_text(highscore2[:l2-1], self.font_small, BLACK, self.WIN, 400, 250)
-            self.draw_text(highscore3[:l3-1], self.font_small, BLACK, self.WIN, 400, 300)
+            self.draw_text(self.highscore[:l-1], self.font_small, BLACK, self.WIN, 400, 200)
+            self.draw_text(self.highscore2[:l2-1], self.font_small, BLACK, self.WIN, 400, 250)
+            self.draw_text(self.highscore3[:l3-1], self.font_small, BLACK, self.WIN, 400, 300)
             #back_button = pygame.Rect(MARGIN, HEIGHT - MARGIN - BUTTON_HEIGHT, BUTTON_WIDTH * 0.75, BUTTON_HEIGHT)
             back_button = pygame.Rect(WIDTH / 2 - button_width / 2, HEIGHT - MARGIN - BUTTON_HEIGHT, button_width,
                                       BUTTON_HEIGHT)
