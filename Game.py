@@ -120,7 +120,10 @@ class Game:
             self.virus_counter = 1  # reset to 1 to prevent level from increasing with every frame
             self.level += 1
             print("changed level to: " + str(self.level))
-
+        if self.protected is True:
+            self.protection_timer -= 1
+            if self.protection_timer == 0:
+                self.protected = False
         if self.level > 0:
             if self.mask_frequency == 0:  # self.level > 0 and self.virus_counter % 3 == 0:  # TODO: nicht fertig! besser: setz eigene mask frequency un dzähl die runter
                 mask = self.superspreader.produce_mask(self)
@@ -162,7 +165,7 @@ class Game:
 
     def check_collision_with_virus(self):  # improve health decrease & collision detection
         if pygame.sprite.spritecollide(self.runner, self.virus_group,
-                                       True):  # self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
+                                       True) and self.protected is False:  # self.runner.rect.colliderect(self.virus):  # detect collisions of two rectangles
             self.collision_virus += 1
             COLLISION_SOUND.play()
             print(self.collision_virus)
@@ -212,7 +215,40 @@ class Game:
     def check_collision_with_mask(self):
         if pygame.sprite.spritecollide(self.runner, self.mask_group, True):
             self.protected = True
+            self.protection_timer = 100
+            if self.protected is True:
+                self.runner.sprites_running = [] # funktioniert noch nicht ganz
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner1_mask.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner2_mask.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner3_mask.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner3a_mask.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner4_mask.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner5_mask.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner1_mask.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner7_mask.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+                self.runner.sprites_running.append(pygame.transform.scale(
+                    pygame.image.load(os.path.join('assets/Runner_mask', 'runner8_mask.png')),
+                    (RUNNER_WIDTH, RUNNER_HEIGHT)))
+
             print("you are wearing a mask now")
+
+            print(self.protection_timer)
             # todo: set timer and then set protection back to false
 
     def count_points(self):  # detect and kill escaped viruses with the help of points_counter sprite object
