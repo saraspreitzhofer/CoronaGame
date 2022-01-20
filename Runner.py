@@ -30,10 +30,10 @@ class Runner(pygame.sprite.Sprite):  # Runner is a pygame Sprite object (Vererbu
             pygame.image.load(os.path.join('assets/Runner', 'runner8.png')),  (RUNNER_WIDTH, RUNNER_HEIGHT)))
 
         self.rect = pygame.Rect(MARGIN, HEIGHT - MARGIN - RUNNER_HEIGHT, RUNNER_WIDTH, RUNNER_HEIGHT)
-       # runner_sprites = [None]*10
+        #runner_sprites = [None]*10
         #for picIndex in range(1, 10):
-         #   runner_sprites[picIndex-1] = pygame.image.load(os.path.join("assets/Runner", "r" + str(picIndex) + ".png"))
-          #  picIndex +=1
+         # runner_sprites[picIndex-1] = pygame.image.load(os.path.join("assets/Runner", "r" + str(picIndex) + ".png"))
+          # picIndex +=1
 
         self.index = 0 #stores the index of the current image
 
@@ -53,7 +53,7 @@ class Runner(pygame.sprite.Sprite):  # Runner is a pygame Sprite object (Vererbu
             self.index = 0 # will be reseted
         else:
             self.image = self.sprites_running[self.index] #the image that will be displayed
-        clock.tick(50)
+            clock.tick(FPS)
 
     def jump(self):
         self.rect.y -= self.VELOCITY_JUMP
@@ -61,3 +61,5 @@ class Runner(pygame.sprite.Sprite):  # Runner is a pygame Sprite object (Vererbu
         if self.VELOCITY_JUMP < -20:
             self.jumping = False
             self.VELOCITY_JUMP = 20
+
+
