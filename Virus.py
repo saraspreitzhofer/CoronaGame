@@ -5,12 +5,13 @@ from GameObject import GameObject  # from filename import className
 
 
 class Virus(GameObject):  # (Vererbung)
-    def __init__(self, velocity):  # runs whenever a new object of this type is made
+    def __init__(self, velocity, rotate_by):  # runs whenever a new object of this type is made
         super().__init__()  # necessary, but why? from clear code tutorial https://www.youtube.com/watch?v=hDu8mcAlY4E
         self.VELOCITY_VIRUS = velocity  # 5
         self.x = VIRUS_X  # center position on x-axis
         self.y = VIRUS_Y  # center position on y-axis
-        self.rotation_angle = 0
+        self.rotation_angle = 0  # start point of rotation
+        self.rotate_by = rotate_by  # increase rotation angle by this factor
         # image will be updated during rotation and original (necessary for rotation)
         self.image_original = pygame.transform.scale(pygame.image.load(os.path.join('assets', "virus.png")),
                                                      (VIRUS_WIDTH, VIRUS_HEIGHT))  # resize image

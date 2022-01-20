@@ -496,13 +496,16 @@ class Menu:
         while self.running:
             self.WIN.fill(WHITE)
             mx, my = pygame.mouse.get_pos()
+            button_width = BUTTON_WIDTH * 0.5
             self.draw_text("High Score", self.font_big, BLACK, self.WIN, 220, 80)
             self.draw_text(highscore[:l-1], self.font_small, BLACK, self.WIN, 400, 200)
             self.draw_text(highscore2[:l2-1], self.font_small, BLACK, self.WIN, 400, 250)
             self.draw_text(highscore3[:l3-1], self.font_small, BLACK, self.WIN, 400, 300)
-            back_button = pygame.Rect(MARGIN, HEIGHT - MARGIN - BUTTON_HEIGHT, BUTTON_WIDTH * 0.75, BUTTON_HEIGHT)
+            #back_button = pygame.Rect(MARGIN, HEIGHT - MARGIN - BUTTON_HEIGHT, BUTTON_WIDTH * 0.75, BUTTON_HEIGHT)
+            back_button = pygame.Rect(WIDTH / 2 - button_width / 2, HEIGHT - MARGIN - BUTTON_HEIGHT, button_width,
+                                      BUTTON_HEIGHT)
             pygame.draw.rect(self.WIN, GREY, back_button)
-            self.draw_text("<-- Back", self.font_small, BLACK, self.WIN, 2 * MARGIN, HEIGHT - BUTTON_HEIGHT)
+            self.draw_text("Back", self.font_small, BLACK, self.WIN, WIDTH/2 - 50, HEIGHT - BUTTON_HEIGHT)
 
             if back_button.collidepoint((mx, my)):
                 if self.click:
