@@ -213,7 +213,7 @@ class Game:
                 self.end_game()  # for a clean end
                 s.display_game_over()
                 # todo: call display_name_screen(), Problem: Aufruf von s.display_game_over() in display_name_screen() beendet das Spiel
-                # s.display_name_screen()  # todo: only ask for name if highscore is achieved
+                #s.display_name_screen()  # todo: only ask for name if highscore is achieved
 
     def check_collision_with_mask(self):
         if pygame.sprite.spritecollide(self.runner, self.mask_group, True):
@@ -490,8 +490,8 @@ class Menu:
             self.run()
 
     def display_name_screen(self):
-        #MUSIC.stop()
-        #GAME_OVER_SOUND.play()
+        MUSIC.stop()
+        GAME_OVER_SOUND.play()
 
         # add points to highscore list
         #file = open("highscore.txt", "a")  # a = append at end of file
@@ -534,15 +534,18 @@ class Menu:
         highscore = lines[0]
         highscore2 = lines[1]
         highscore3 = lines[2]
+        l = len(highscore)
+        l2 = len(highscore2)
+        l3 = len(highscore3)
         file.close()
 
         while self.running:
             self.WIN.fill(WHITE)
             mx, my = pygame.mouse.get_pos()
             self.draw_text("High Score", self.font_big, BLACK, self.WIN, 220, 80)
-            self.draw_text(highscore, self.font_small, BLACK, self.WIN, 400, 200)  # todo: remove linebreak from output
-            self.draw_text(highscore2, self.font_small, BLACK, self.WIN, 400, 250)
-            self.draw_text(highscore3, self.font_small, BLACK, self.WIN, 400, 300)
+            self.draw_text(highscore[:l-1], self.font_small, BLACK, self.WIN, 400, 200)  # todo: remove linebreak from output
+            self.draw_text(highscore2[:l2-1], self.font_small, BLACK, self.WIN, 400, 250)
+            self.draw_text(highscore3[:l3-1], self.font_small, BLACK, self.WIN, 400, 300)
             back_button = pygame.Rect(MARGIN, HEIGHT - MARGIN - BUTTON_HEIGHT, BUTTON_WIDTH * 0.75, BUTTON_HEIGHT)
             pygame.draw.rect(self.WIN, GREY, back_button)
             self.draw_text("<-- Back", self.font_small, BLACK, self.WIN, 2 * MARGIN, HEIGHT - BUTTON_HEIGHT)
