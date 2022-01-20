@@ -35,10 +35,14 @@ RADIUS = 30
 
 ROTATEBY_VIRUS = 5
 
-# virus frequency settings
+# frequency settings
 VIRUS_FREQUENCY_FRAMES_START = 140 #
 MASK_FREQUENCY_FRAMES_START = 300
 REDUCE_FRAMES_BETWEEN_VIRUS = 20
+# velocity settings
+VIRUS_BASIC_VELOCITY = 7
+MASK_BASIC_VELOCITY = 4
+
 
 # sounds
 GAME_OVER_SOUND = pygame.mixer.Sound(os.path.join('assets', 'zapsplat_game_over.mp3'))
