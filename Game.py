@@ -254,12 +254,6 @@ class Game:
         text = "Points: " + str(self.points)
         Menu.draw_text(self, text, pygame.font.Font(None, 50), BLACK, self.WIN, 400, 2 * MARGIN)
 
-    # def show_start_screen(self):  # game splash / start screen
-    #    pass
-
-    # def show_go_screen(self):  # game over / continue
-    #    pass
-
 
 class Menu:
     def __init__(self):  # initialize game window etc
@@ -414,26 +408,35 @@ class Menu:
             mx, my = pygame.mouse.get_pos()
             ok_button = pygame.Rect(WIDTH / 2 - BUTTON_WIDTH * 0.4 / 2, 180 + 2 * MARGIN + 2 * BUTTON_HEIGHT,
                                     BUTTON_WIDTH * 0.4, BUTTON_HEIGHT)
-            user_input = pygame.Rect(450, 240, BUTTON_WIDTH, BUTTON_HEIGHT)
+            user_input_box = pygame.Rect(450, 240, BUTTON_WIDTH, BUTTON_HEIGHT)
             pygame.draw.rect(self.WIN, GREY, ok_button)
-            pygame.draw.rect(self.WIN, GREY, user_input)
+            pygame.draw.rect(self.WIN, GREY, user_input_box)
             self.draw_text("Ooops! You are dead :/", self.font_big, BLACK, self.WIN, 60, 40)
             self.draw_text("Viruses avoided: " + str(g.points), self.font_small, BLACK,
                            self.WIN, 250, 130)
             self.draw_text("Your name: ", self.font_small, BLACK, self.WIN, 200, 250)
+            self.draw_text(self.user_name, self.font_small, BLACK, self.WIN, user_input_box.x + MARGIN, user_input_box.y + MARGIN)
             self.draw_text("OK", self.font_small, BLACK, self.WIN, ok_button.x + MARGIN, ok_button.y + MARGIN)
+
+            for event in pygame.event.get():  # loop through list of all different events
+                if event.type == pygame.KEYDOWN:  # get user input  # todo: user input is only sometimes recognised
+                    if event.type == pygame.K_RETURN:   # todo: doesn't work yet
+                        self.user_name = self.user_name[:-1]    # get text input from 0 to -1 i.e. end
+                        s.display_game_over()
+                    if event.type == pygame.K_BACKSPACE and len(self.user_name) > 0:    # todo: doesn't work yet
+                        self.user_name = self.user_name[:len(self.user_name)-1]
+                    else:
+                        print("unicode: " + event.unicode)
+                        self.user_name += event.unicode
 
             if ok_button.collidepoint(mx, my):
                 if self.click:
                     self.click = False
                     s.display_game_over()
 
-            if user_input.collidepoint(mx, my):
+            if user_input_box.collidepoint(mx, my):
                 if self.click:
                     self.click = False
-                    for event in pygame.event.get():  # loop through list of all different events
-                        if event.type == pygame.KEYDOWN:    # get user input
-                            pass
                     # todo: ask for user input
                     # todo: add user input to highscore file
 
