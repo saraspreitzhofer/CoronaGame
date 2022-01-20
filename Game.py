@@ -39,7 +39,7 @@ class Game:
         # all about virus creation
         self.superspreader = None  # use to produce virus and mask sprites
         # self.frame_counter = None  # use for intervals when producing new objects
-        self.virus_counter = None  # used to measure player's progress and to set level TODO: set level noch aktuell?
+        self.virus_counter = None  # used to measure player's progress and to set level
         self.virus_frequency = None
         self.mask_frequency = None
 
@@ -108,15 +108,17 @@ class Game:
             self.draw()
 
     def update(self):  # game loop - update
-        # virus sprite production depending on number of frames passed
+        # virus sprite production depending on number of frames passed (virus_frequency is reduced with each frame in
+        # superspreader)
         if self.virus_frequency == 0:  # self.frame_counter % self.virus_frequency == 0:
             virus = self.superspreader.produce_virus(self)  # produce virus with velocity 7
             self.all_sprites.add(virus)  # add virus to sprites group
             self.virus_group.add(virus)
             self.virus_counter += 1 #TODO: move to superspreader
-            #self.frame_counter = 0  # TODO: stattdessen einfach nur virusfrequency runterzählen und reagieren, wenn 0?
+            #self.frame_counter = 0 nicht mehr verwendet
 
-        if self.virus_counter % 13 == 0:  # increase level
+        # increase level according to nr of produced viruses
+        if self.virus_counter % 10 == 0:  # TODO: move modulus to settings?
             self.virus_counter = 1  # reset to 1 to prevent level from increasing with every frame
             self.level += 1
             print("changed level to: " + str(self.level))
@@ -124,19 +126,20 @@ class Game:
             self.protection_timer -= 1
             if self.protection_timer == 0:
                 self.protected = False
+
+
+        # mask production
         if self.level > 0:
-            if self.mask_frequency == 0:  # self.level > 0 and self.virus_counter % 3 == 0:  # TODO: nicht fertig! besser: setz eigene mask frequency un dzähl die runter
+            if self.mask_frequency == 0:  # self.level > 0 and self.virus_counter % 3 == 0:
                 mask = self.superspreader.produce_mask(self)
                 self.all_sprites.add(mask)
                 self.mask_group.add(mask)
-            self.mask_frequency -= 1  # TODO: experimentierstadium - schaut aber gut aus
-            # TODO: reset mask frequency in superspreader
-            # runner
+            self.mask_frequency -= 1
 
         self.all_sprites.update()
         pygame.display.update()  # update changes
         #self.frame_counter += 1  # necessary for virus sprite production
-        self.virus_frequency -= 1  # TODO: experimentierstadium - lassen?
+        self.virus_frequency -= 1
 
     def events(self):  # game loop - events
         for event in pygame.event.get():  # loop through list of all different events
