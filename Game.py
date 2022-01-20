@@ -217,7 +217,7 @@ class Game:
             self.protected = True
             self.protection_timer = 100
             if self.protected is True:
-                self.runner.sprites_running = [] # ..funktioniert noch nicht ganz
+                self.runner.sprites_running = [] # ...funktioniert noch nicht ganz
                 self.runner.sprites_running.append(pygame.transform.scale(
                     pygame.image.load(os.path.join('assets/Runner_mask', 'runner1_mask.png')),
                     (RUNNER_WIDTH, RUNNER_HEIGHT)))
