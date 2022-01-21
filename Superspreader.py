@@ -40,6 +40,7 @@ class Superspreader:
             self.virus_rotate_by += self.add
 
         virus = Virus(self.virus_velocity, self.virus_rotate_by)
+        game.virus_counter += 1
         return virus
 
     def produce_mask(self, game):
@@ -48,4 +49,4 @@ class Superspreader:
         elif game.level > 1:
             game.mask_frequency = MASK_FREQUENCY_FRAMES_START + (
                         100 * (game.level - 1))  # Mask frequency is changed with each level
-        return Mask(self.mask_velocity + random.randint(0, 3))
+        return Mask(self.mask_velocity + random.randint(0, 3)) # random mask veloci

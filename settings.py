@@ -3,6 +3,10 @@ import os
 
 pygame.mixer.init()  # for sounds
 
+LEVEL_PROGRESS = 10  # number of viruses before next level
+POINTS_MASK = 5  # number of points earned for each collected mask
+PROTECTION_MASK = 100  # number of frames for protection after collecting a mask
+
 TITLE = "Corona Game"
 TITLE_START = "Start Menu"
 FPS = 60  # frames per second
@@ -30,9 +34,9 @@ BUTTON1 = WIDTH / 2 - BUTTON_WIDTH / 2, 180, BUTTON_WIDTH, BUTTON_HEIGHT
 BUTTON2 = WIDTH / 2 - BUTTON_WIDTH / 2, 180 + MARGIN + BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT
 BUTTON3 = WIDTH / 2 - BUTTON_WIDTH / 2, 180 + 2 * MARGIN + 2 * BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT
 
-RADIUS = 30
+RADIUS = 30  # TODO: Radius wofür? besser benennen
 
-ROTATEBY_VIRUS = 4  #TODO: noch benutzt?
+ROTATEBY_VIRUS = 4
 
 # frequency settings
 VIRUS_FREQUENCY_FRAMES_START = 140 #

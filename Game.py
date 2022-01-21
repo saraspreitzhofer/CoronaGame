@@ -120,11 +120,9 @@ class Game:
             virus = self.superspreader.produce_virus(self)  # produce virus with velocity 7
             self.all_sprites.add(virus)  # add virus to sprites group
             self.virus_group.add(virus)
-            self.virus_counter += 1 #TODO: move to superspreader
-            #self.frame_counter = 0 nicht mehr verwendet
 
         # increase level according to nr of produced viruses
-        if self.virus_counter % 4 == 0:  # TODO: move modulus to settings?
+        if self.virus_counter % LEVEL_PROGRESS == 0:
             self.virus_counter = 1  # reset to 1 to prevent level from increasing with every frame
             self.level += 1
             print("changed level to: " + str(self.level))
@@ -132,10 +130,12 @@ class Game:
         # count down protection timer
         if self.protected is True:
             self.protection_timer -= 1
-            #print("protection timer: " + str(self.protection_timer))
             if self.protection_timer == 0:
                 self.protected = False
-                self.runner.runner_set_normal()
+                if self.collision_virus == 2:  # if only one life left, runner goes back to red
+                    self.runner.runner_set_almost_dead()
+                else:
+                    self.runner.runner_set_normal()
                 print("end of protection")
 
         # mask production
@@ -190,7 +190,7 @@ class Game:
                 pygame.sprite.Sprite.kill(self.health2)
                 self.runner.runner_set_almost_dead()  # make runner red when only 1 health is left
 
-            elif self.collision_virus == 3:  # display_game_over hier aufrufen
+            elif self.collision_virus == 3:  # this means game over!
                 pygame.sprite.Sprite.kill(self.health1)
                 print("you are  dead ")
                 self.end_game()  # for a clean end
@@ -198,17 +198,15 @@ class Game:
 
     def check_collision_with_mask(self):
         if pygame.sprite.spritecollide(self.runner, self.mask_group, True):
-            self.points += 5 # player earns 5 points for each mask
-            self.runner.runner_set_protected()
             self.protected = True
-            self.protection_timer = 100
+            self.protection_timer = PROTECTION_MASK  # number of frames until protection disappears
+            self.points += POINTS_MASK  # player earns points for each mask
+            self.runner.runner_set_protected() # change runner appearance
             print("you are wearing a mask now")
 
     def count_points(self):  # detect and kill escaped viruses with the help of points_counter sprite object
         if pygame.sprite.spritecollide(self.points_counter, self.virus_group, True):
             self.points += 1
-            print("Viruses escaped: " + str(self.points))
-            print("Viruses in group: " + str(self.virus_group))
 
     def end_game(self):  # kill all remaining game objects
         self.playing = False  # game might be still running but not actively playing
