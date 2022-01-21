@@ -418,27 +418,40 @@ class Menu:
             self.draw_text(self.user_name, self.font_small, BLACK, self.WIN, user_input_box.x + MARGIN, user_input_box.y + MARGIN)
             self.draw_text("OK", self.font_small, BLACK, self.WIN, ok_button.x + MARGIN, ok_button.y + MARGIN)
 
-            for event in pygame.event.get():  # loop through list of all different events
+            keys = pygame.key.get_pressed()  # list of currently pressed key(s)
+            if keys[pygame.K_RETURN]:
+                self.user_name = self.user_name[:-1]  # get text input from 0 to -1 i.e. end
+                s.display_game_over()
+            elif keys[pygame.K_BACKSPACE]:
+                if len(self.user_name) > 0:
+                    self.user_name = self.user_name[:len(self.user_name) - 1]
+            else:   # TODO
+                for key in keys:
+                    if keys[key]:
+                        print("unicode: {key}")
+                        #self.user_name += key.unicode
+
+            """for event in pygame.event.get():  # loop through list of all different events
                 if event.type == pygame.KEYDOWN:  # get user input  # todo: user input is only sometimes recognised
-                    if event.type == pygame.K_RETURN:   # todo: doesn't work yet
+                    if event.key == pygame.K_RETURN:
                         self.user_name = self.user_name[:-1]    # get text input from 0 to -1 i.e. end
                         s.display_game_over()
-                    if event.type == pygame.K_BACKSPACE and len(self.user_name) > 0:    # todo: doesn't work yet
+                    elif event.key == pygame.K_BACKSPACE and len(self.user_name) > 0:
                         self.user_name = self.user_name[:len(self.user_name)-1]
                     else:
                         print("unicode: " + event.unicode)
-                        self.user_name += event.unicode
+                        self.user_name += event.unicode"""
 
             if ok_button.collidepoint(mx, my):
                 if self.click:
                     self.click = False
                     s.display_game_over()
 
-            if user_input_box.collidepoint(mx, my):
+            """if user_input_box.collidepoint(mx, my):
                 if self.click:
                     self.click = False
                     # todo: ask for user input
-                    # todo: add user input to highscore file
+                    # todo: add user input to highscore file"""
 
             self.run()
 
@@ -490,7 +503,7 @@ class Menu:
         # get highscore list
         file = open("highscore.txt", "r")  # read from file
         self.lines = file.readlines()  # create list
-        self.lines.sort(reverse=True)  # sort list in descending order
+        self.lines.sort(key=lambda la: float(la.split(" ")[0]), reverse=True)  # sort points in descending order
         print(self.lines)
         self.highscore = self.lines[0]
         self.highscore2 = self.lines[1]
@@ -504,10 +517,10 @@ class Menu:
             self.WIN.fill(WHITE)
             mx, my = pygame.mouse.get_pos()
             button_width = BUTTON_WIDTH * 0.5
-            self.draw_text("High Score", self.font_big, BLACK, self.WIN, 220, 80)
-            self.draw_text(self.highscore[:l-1], self.font_small, BLACK, self.WIN, 400, 200)
-            self.draw_text(self.highscore2[:l2-1], self.font_small, BLACK, self.WIN, 400, 250)
-            self.draw_text(self.highscore3[:l3-1], self.font_small, BLACK, self.WIN, 400, 300)
+            self.draw_text("High Score", self.font_big, BLACK, self.WIN, 270, 80)
+            self.draw_text(self.highscore[:l-1], self.font_small, BLACK, self.WIN, 350, 200)
+            self.draw_text(self.highscore2[:l2-1], self.font_small, BLACK, self.WIN, 350, 250)
+            self.draw_text(self.highscore3[:l3-1], self.font_small, BLACK, self.WIN, 350, 300)
             #back_button = pygame.Rect(MARGIN, HEIGHT - MARGIN - BUTTON_HEIGHT, BUTTON_WIDTH * 0.75, BUTTON_HEIGHT)
             back_button = pygame.Rect(WIDTH / 2 - button_width / 2, HEIGHT - MARGIN - BUTTON_HEIGHT, button_width,
                                       BUTTON_HEIGHT)
