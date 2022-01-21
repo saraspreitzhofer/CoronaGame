@@ -2,6 +2,7 @@ import sys
 
 import pygame
 import os  # to define path to the images
+from time import sleep
 
 from Mask import Mask
 from PointsCounter import PointsCounter
@@ -311,7 +312,7 @@ class Menu:
             self.draw_text("Corona Game", self.font_big, BLACK, self.WIN, 220, 80)
             self.draw_text("Play", self.font_small, BLACK, self.WIN, WIDTH / 2 - BUTTON_WIDTH / 2 + 2 * MARGIN,
                            180 + MARGIN)
-            self.draw_text("High Score", self.font_small, BLACK, self.WIN, WIDTH / 2 - BUTTON_WIDTH / 2 + 2 * MARGIN,
+            self.draw_text("High Scores", self.font_small, BLACK, self.WIN, WIDTH / 2 - BUTTON_WIDTH / 2 + 2 * MARGIN,
                            180 + 2 * MARGIN + BUTTON_HEIGHT)
             self.draw_text("Quit", self.font_small, BLACK, self.WIN, WIDTH / 2 - BUTTON_WIDTH / 2 + 2 * MARGIN,
                            180 + 3 * MARGIN + 2 * BUTTON_HEIGHT)
@@ -408,39 +409,31 @@ class Menu:
             mx, my = pygame.mouse.get_pos()
             ok_button = pygame.Rect(WIDTH / 2 - BUTTON_WIDTH * 0.4 / 2, 180 + 2 * MARGIN + 2 * BUTTON_HEIGHT,
                                     BUTTON_WIDTH * 0.4, BUTTON_HEIGHT)
-            user_input_box = pygame.Rect(450, 240, BUTTON_WIDTH, BUTTON_HEIGHT)
+            user_input_box = pygame.Rect(400, 240, BUTTON_WIDTH*1.5, BUTTON_HEIGHT)
             pygame.draw.rect(self.WIN, GREY, ok_button)
             pygame.draw.rect(self.WIN, GREY, user_input_box)
             self.draw_text("Ooops! You are dead :/", self.font_big, BLACK, self.WIN, 60, 40)
             self.draw_text("Viruses avoided: " + str(g.points), self.font_small, BLACK,
                            self.WIN, 250, 130)
-            self.draw_text("Your name: ", self.font_small, BLACK, self.WIN, 200, 250)
+            self.draw_text("Your name: ", self.font_small, BLACK, self.WIN, 150, 250)
             self.draw_text(self.user_name, self.font_small, BLACK, self.WIN, user_input_box.x + MARGIN, user_input_box.y + MARGIN)
             self.draw_text("OK", self.font_small, BLACK, self.WIN, ok_button.x + MARGIN, ok_button.y + MARGIN)
 
             keys = pygame.key.get_pressed()  # list of currently pressed key(s)
             if keys[pygame.K_RETURN]:
-                self.user_name = self.user_name[:-1]  # get text input from 0 to -1 i.e. end
                 s.display_game_over()
             elif keys[pygame.K_BACKSPACE]:
                 if len(self.user_name) > 0:
                     self.user_name = self.user_name[:len(self.user_name) - 1]
-            else:   # TODO
-                for key in keys:
-                    if keys[key]:
-                        print("unicode: {key}")
-                        #self.user_name += key.unicode
-
-            """for event in pygame.event.get():  # loop through list of all different events
-                if event.type == pygame.KEYDOWN:  # get user input  # todo: user input is only sometimes recognised
-                    if event.key == pygame.K_RETURN:
-                        self.user_name = self.user_name[:-1]    # get text input from 0 to -1 i.e. end
-                        s.display_game_over()
-                    elif event.key == pygame.K_BACKSPACE and len(self.user_name) > 0:
-                        self.user_name = self.user_name[:len(self.user_name)-1]
-                    else:
-                        print("unicode: " + event.unicode)
-                        self.user_name += event.unicode"""
+                sleep(0.15)
+            elif keys[pygame.K_SPACE]:
+                self.user_name += " "
+                sleep(0.15)
+            else:
+                for x in range(len(keys)):  # for each key
+                    if keys[x]:     # if key is pressed
+                        self.user_name += pygame.key.name(x)    # add character of pressed key to user_name
+                        sleep(0.15)
 
             if ok_button.collidepoint(mx, my):
                 if self.click:
@@ -517,15 +510,27 @@ class Menu:
             self.WIN.fill(WHITE)
             mx, my = pygame.mouse.get_pos()
             button_width = BUTTON_WIDTH * 0.5
-            self.draw_text("High Score", self.font_big, BLACK, self.WIN, 270, 80)
+            self.draw_text("High Scores", self.font_big, BLACK, self.WIN, 270, 80)
             self.draw_text(self.highscore[:l-1], self.font_small, BLACK, self.WIN, 350, 200)
-            self.draw_text(self.highscore2[:l2-1], self.font_small, BLACK, self.WIN, 350, 250)
-            self.draw_text(self.highscore3[:l3-1], self.font_small, BLACK, self.WIN, 350, 300)
+            self.draw_text(self.highscore2[:l2-1], self.font_small, BLACK, self.WIN, 350, 270)
+            self.draw_text(self.highscore3[:l3-1], self.font_small, BLACK, self.WIN, 350, 340)
             #back_button = pygame.Rect(MARGIN, HEIGHT - MARGIN - BUTTON_HEIGHT, BUTTON_WIDTH * 0.75, BUTTON_HEIGHT)
             back_button = pygame.Rect(WIDTH / 2 - button_width / 2, HEIGHT - MARGIN - BUTTON_HEIGHT, button_width,
                                       BUTTON_HEIGHT)
             pygame.draw.rect(self.WIN, GREY, back_button)
             self.draw_text("Back", self.font_small, BLACK, self.WIN, WIDTH/2 - 50, HEIGHT - BUTTON_HEIGHT)
+
+            # display pictures
+            runner = pygame.transform.scale(pygame.image.load(os.path.join('assets/Runner', "runner3a.png")),
+                                            (RUNNER_WIDTH * 1.5, RUNNER_HEIGHT * 1.5))
+            small_virus = pygame.transform.scale(pygame.image.load(os.path.join('assets', "virus.png")),
+                                                 (VIRUS_WIDTH, VIRUS_HEIGHT))
+            big_virus = pygame.transform.scale(pygame.image.load(os.path.join('assets', "virus.png")),
+                                               (VIRUS_WIDTH * 2, VIRUS_HEIGHT * 2))
+            self.WIN.blit(runner, (WIDTH - 2 * MARGIN - RUNNER_WIDTH * 1.5,
+                                   HEIGHT - 2 * MARGIN - RUNNER_HEIGHT * 1.5))  # draw surface (pictures, text, ...) on the screen
+            self.WIN.blit(small_virus, (50, 350))
+            self.WIN.blit(big_virus, (150, 200))
 
             if back_button.collidepoint((mx, my)):
                 if self.click:
