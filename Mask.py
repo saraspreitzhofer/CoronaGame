@@ -5,7 +5,7 @@ from GameObject import GameObject  # from filename import className
 
 
 class Mask(GameObject):
-    def __init__(self, velocity):  # runs whenever a new object of this type is made
+    def __init__(self, velocity):
         super().__init__()  # necessary, but why? from clear code tutorial https://www.youtube.com/watch?v=hDu8mcAlY4E
         self.VELOCITY_MASK = velocity
         self.x = MASK_X  # position on x-axis
@@ -15,7 +15,7 @@ class Mask(GameObject):
         self.rect = self.image.get_rect(topleft=(self.x, MASK_Y))
 
     def update(self):
-        self.x -= self.VELOCITY_MASK  # move image VELOCITY_VIRUS pixel to the left in each frame
+        self.x -= self.VELOCITY_MASK  # move image to the left in each frame by VELOCITY_VIRUS pixel
         self.rect = self.image.get_rect(topleft=(self.x, MASK_Y))
 
 

@@ -17,6 +17,7 @@ FramePerSec = pygame.time.Clock()
 
 
 class Game:
+    # game is created only once, and it is running as long as the application is open. Variables are initialized/reset in the new() method for each time playing
     def __init__(self):  # initialize game window etc
         self.game_over = None
         pygame.init()
@@ -32,39 +33,40 @@ class Game:
         self.all_sprites = pygame.sprite.Group()  # creates new empty group for all sprites
         self.virus_group = pygame.sprite.Group()
         self.mask_group = pygame.sprite.Group()
-        self.runner_group = pygame.sprite.Group()
+        #self.runner_group = pygame.sprite.Group() # TODO: not necessary
 
-        # create runner and add it to sprites group
+        # runner sprite object
         self.runner = None
 
         # all about virus creation
-        self.superspreader = None  # use to produce virus and mask sprites
-        # self.frame_counter = None  # use for intervals when producing new objects
-        self.virus_counter = None  # used to measure player's progress and to set level
-        self.virus_frequency = None
-        self.mask_frequency = None
+        self.superspreader = None  # produces virus and mask sprites
+        # self.frame_counter = None  # was used for counting intervals, not in use anymore
+        self.virus_counter = None  # level is increased according to nr of viruses already produced
+        self.virus_frequency = None  # nr of frames between viruses - is changed dynamically by superspreader
+        self.mask_frequency = None  # nr of frames between masks
 
-        # count collision -> virus
-        self.collision_virus = 0
+        self.level = None
 
         # protection
-        self.protected = False  # should be true for a certain period of time or frames after a mask has been collected
-        self.protection_timer = None # count down when protected
+        self.protected = False  # true for a certain interval of frames after a mask has been collected
+        self.protection_timer = None  # count down interval when protected == True
 
-        # count points (virus reached the left screen border)
-        self.points_counter = None
-        self.points = None  # equivalent to points earned during the game
+        # count points (viruses reached the left screen border)
+        self.points_counter = None  # invisible sprite object at the left border of the screen detects collisions and kills viruses
+        self.points = None
 
-        # heats for health
+        # count collisions with virus (health is decreased with increasing nr of collisions, 3 max)
+        self.collision_virus = 0
+
+        # hearts for health (displayed depending on collision_virus)
         self.health1 = None
         self.health2 = None
         self.health3 = None
 
-        # level
-        self.level = None
-
     def new(self):  # start a new game
-        # create runner and add it to sprites group
+        # set counters to 0 (important when restarting the game)
+
+        # create runner sprite and add it to sprites group
         self.runner = Runner()
         self.all_sprites.add(self.runner)
 
@@ -83,21 +85,16 @@ class Game:
         self.all_sprites.add(self.health3)
 
         # protection
-        self.protected = False  # should be true for a certain period of time or frames after a mask has been collected
-        self.protection_timer = 0  # count down when protected
-
-        # set counters to 0 (important when restarting the game)
+        self.protected = False # default
+        self.protection_timer = 0  # default
         self.points = 0
         self.virus_counter = 0
         self.collision_virus = 0
         self.virus_frequency = 0
         self.mask_frequency = 0
-
-        # self.frame_counter = 0  # use for intervals when producing new
-        self.superspreader = Superspreader()
-
-        # level
         self.level = 0
+
+        self.superspreader = Superspreader()
 
         self.running = True
         self.playing = True
@@ -106,7 +103,7 @@ class Game:
         self.run()
 
     def run(self):  # code that handles main game loop in pygame
-        MUSIC.play(loops=-1)  # play in endless loop
+        MUSIC.play(loops=-1)  # play in endless loop TODO: why -1?
         while self.playing:  # game loop: open & close the window
             self.clock.tick(FPS)  # controls speed of the while loop
             self.events()
@@ -122,13 +119,13 @@ class Game:
             self.virus_group.add(virus)
 
         # increase level according to nr of produced viruses
-        if self.virus_counter % LEVEL_PROGRESS == 0:
+        if self.virus_counter % LEVEL_INTERVAL == 0:
             self.virus_counter = 1  # reset to 1 to prevent level from increasing with every frame
             self.level += 1
             print("changed level to: " + str(self.level))
 
         # count down protection timer
-        if self.protected is True:
+        if self.protected is True:  # set True when runner collides with a mask (check_collision_with_mask)
             self.protection_timer -= 1
             if self.protection_timer == 0:
                 self.protected = False
@@ -175,8 +172,7 @@ class Game:
         self.count_points()
 
     # collision with viruses
-    # decrease health
-    # end game
+    # decrease health & end game -> call enter name screen for high score list
     def check_collision_with_virus(self):
         if pygame.sprite.spritecollide(self.runner, self.virus_group,
                                        True) and self.protected is False:
@@ -201,14 +197,14 @@ class Game:
             self.protected = True
             self.protection_timer = PROTECTION_MASK  # number of frames until protection disappears
             self.points += POINTS_MASK  # player earns points for each mask
-            self.runner.runner_set_protected() # change runner appearance
+            self.runner.runner_set_protected()  # change runner appearance
             print("you are wearing a mask now")
 
-    def count_points(self):  # detect and kill escaped viruses with the help of points_counter sprite object
+    def count_points(self):  # count points by collisions between viruses and points_counter sprite at the left border of the screen
         if pygame.sprite.spritecollide(self.points_counter, self.virus_group, True):
             self.points += 1
 
-    def end_game(self):  # kill all remaining game objects
+    def end_game(self):  # kill all remaining game objects when game is over
         self.playing = False  # game might be still running but not actively playing
         for thing in self.all_sprites:  # kills all sprites in the game! all sprites have to be initialized again with new game!
             thing.kill()
@@ -346,30 +342,32 @@ class Menu:
             self.run()
 
     def display_help_page(self):
+        # text layout settings
         indentation = 8 * MARGIN
         line_spacing = 40
-        text_topleft = 160
+        text_topleft = 160  # starting point for text block
         button_width = BUTTON_WIDTH * 0.5
         while self.running:
             self.WIN.fill(WHITE)
             mx, my = pygame.mouse.get_pos()
-            back_button = pygame.Rect(WIDTH/2 - button_width/2, HEIGHT - MARGIN - BUTTON_HEIGHT, BUTTON_WIDTH * 0.5, BUTTON_HEIGHT)
+            back_button = pygame.Rect(WIDTH / 2 - button_width / 2, HEIGHT - MARGIN - BUTTON_HEIGHT, BUTTON_WIDTH * 0.5,
+                                      BUTTON_HEIGHT)
             pygame.draw.rect(self.WIN, GREY, back_button)
-            self.draw_text("Back", self.font_small, BLACK, self.WIN, WIDTH/2 - 50, HEIGHT - BUTTON_HEIGHT)
+            self.draw_text("Back", self.font_small, BLACK, self.WIN, WIDTH / 2 - 50, HEIGHT - BUTTON_HEIGHT)
             self.draw_text("Corona Game", self.font_big, BLACK, self.WIN, 220, 50)
             # jede Zeile in einen Befehl, falls jemand eine bessere Lösung hat bitte ändern
             self.draw_text("Avoid getting hit by a virus by jumping over it. To jump, press the -SPACE KEY-.",
                            self.font_very_small, BLACK, self.WIN, indentation, text_topleft)
             self.draw_text("If you dodge the virus, you earn one point and the game continues.",
-                           self.font_very_small, BLACK, self.WIN, indentation, text_topleft+line_spacing)
+                           self.font_very_small, BLACK, self.WIN, indentation, text_topleft + line_spacing)
             self.draw_text("If run into a virus, you get infected and your health is decreased.",
                            self.font_very_small, BLACK, self.WIN, indentation, text_topleft + (2 * line_spacing))
             self.draw_text("After three infections, the game is lost.",
                            self.font_very_small, BLACK, self.WIN, indentation, text_topleft + (3 * line_spacing))
             self.draw_text("Masks give you temporal protection against virus infection and you earn 5 points.",
-                            self.font_very_small, BLACK, self.WIN, indentation, text_topleft + (4 * line_spacing))
+                           self.font_very_small, BLACK, self.WIN, indentation, text_topleft + (4 * line_spacing))
             self.draw_text("As long as you are wearing a mask, you don't have to dodge the virus.",
-                            self.font_very_small, BLACK, self.WIN, indentation, text_topleft + (5 * line_spacing))
+                           self.font_very_small, BLACK, self.WIN, indentation, text_topleft + (5 * line_spacing))
 
             if back_button.collidepoint((mx, my)):
                 if self.click:
@@ -407,14 +405,15 @@ class Menu:
             mx, my = pygame.mouse.get_pos()
             ok_button = pygame.Rect(WIDTH / 2 - BUTTON_WIDTH * 0.4 / 2, 180 + 2 * MARGIN + 2 * BUTTON_HEIGHT,
                                     BUTTON_WIDTH * 0.4, BUTTON_HEIGHT)
-            user_input_box = pygame.Rect(400, 240, BUTTON_WIDTH*1.5, BUTTON_HEIGHT)
+            user_input_box = pygame.Rect(400, 240, BUTTON_WIDTH * 1.5, BUTTON_HEIGHT)
             pygame.draw.rect(self.WIN, GREY, ok_button)
             pygame.draw.rect(self.WIN, GREY, user_input_box)
             self.draw_text("Ooops! You are dead :/", self.font_big, BLACK, self.WIN, 60, 40)
             self.draw_text("Viruses avoided: " + str(g.points), self.font_small, BLACK,
                            self.WIN, 250, 130)
             self.draw_text("Your name: ", self.font_small, BLACK, self.WIN, 150, 250)
-            self.draw_text(self.user_name, self.font_small, BLACK, self.WIN, user_input_box.x + MARGIN, user_input_box.y + MARGIN)
+            self.draw_text(self.user_name, self.font_small, BLACK, self.WIN, user_input_box.x + MARGIN,
+                           user_input_box.y + MARGIN)
             self.draw_text("OK", self.font_small, BLACK, self.WIN, ok_button.x + MARGIN, ok_button.y + MARGIN)
 
             keys = pygame.key.get_pressed()  # list of currently pressed key(s)
@@ -429,8 +428,8 @@ class Menu:
                 sleep(0.15)
             else:
                 for x in range(len(keys)):  # for each key
-                    if keys[x]:     # if key is pressed
-                        self.user_name += pygame.key.name(x)    # add character of pressed key to user_name
+                    if keys[x]:  # if key is pressed
+                        self.user_name += pygame.key.name(x)  # add character of pressed key to user_name
                         sleep(0.15)
 
             if ok_button.collidepoint(mx, my):
@@ -456,7 +455,7 @@ class Menu:
             # initialize text and buttons
             self.WIN.fill(WHITE)
             mx, my = pygame.mouse.get_pos()
-            play_again_button = pygame.Rect(BUTTON1)  # TODO: positionen von verbessern
+            play_again_button = pygame.Rect(BUTTON1)
             main_menu_button = pygame.Rect(BUTTON2)
             quit_button = pygame.Rect(BUTTON3)
             pygame.draw.rect(self.WIN, GREY, play_again_button)
@@ -509,14 +508,14 @@ class Menu:
             mx, my = pygame.mouse.get_pos()
             button_width = BUTTON_WIDTH * 0.5
             self.draw_text("High Scores", self.font_big, BLACK, self.WIN, 270, 80)
-            self.draw_text(self.highscore[:l-1], self.font_small, BLACK, self.WIN, 350, 200)
-            self.draw_text(self.highscore2[:l2-1], self.font_small, BLACK, self.WIN, 350, 270)
-            self.draw_text(self.highscore3[:l3-1], self.font_small, BLACK, self.WIN, 350, 340)
-            #back_button = pygame.Rect(MARGIN, HEIGHT - MARGIN - BUTTON_HEIGHT, BUTTON_WIDTH * 0.75, BUTTON_HEIGHT)
+            self.draw_text(self.highscore[:l - 1], self.font_small, BLACK, self.WIN, 350, 200)
+            self.draw_text(self.highscore2[:l2 - 1], self.font_small, BLACK, self.WIN, 350, 270)
+            self.draw_text(self.highscore3[:l3 - 1], self.font_small, BLACK, self.WIN, 350, 340)
+            # back_button = pygame.Rect(MARGIN, HEIGHT - MARGIN - BUTTON_HEIGHT, BUTTON_WIDTH * 0.75, BUTTON_HEIGHT)
             back_button = pygame.Rect(WIDTH / 2 - button_width / 2, HEIGHT - MARGIN - BUTTON_HEIGHT, button_width,
                                       BUTTON_HEIGHT)
             pygame.draw.rect(self.WIN, GREY, back_button)
-            self.draw_text("Back", self.font_small, BLACK, self.WIN, WIDTH/2 - 50, HEIGHT - BUTTON_HEIGHT)
+            self.draw_text("Back", self.font_small, BLACK, self.WIN, WIDTH / 2 - 50, HEIGHT - BUTTON_HEIGHT)
 
             # display pictures
             runner = pygame.transform.scale(pygame.image.load(os.path.join('assets/Runner', "runner3a.png")),

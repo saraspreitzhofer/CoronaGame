@@ -3,7 +3,7 @@ import os
 
 pygame.mixer.init()  # for sounds
 
-LEVEL_PROGRESS = 10  # number of viruses before next level
+LEVEL_INTERVAL = 10  # number of viruses before next level
 POINTS_MASK = 5  # number of points earned for each collected mask
 PROTECTION_MASK = 100  # number of frames for protection after collecting a mask
 
