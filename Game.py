@@ -359,7 +359,7 @@ class Menu:
                            self.font_very_small, BLACK, self.WIN, indentation, text_topleft)
             self.draw_text("If you dodge the virus, you earn one point and the game continues.",
                            self.font_very_small, BLACK, self.WIN, indentation, text_topleft + line_spacing)
-            self.draw_text("If run into a virus, you get infected and your health is decreased.",
+            self.draw_text("If you run into a virus, you get infected and your health is decreased.",
                            self.font_very_small, BLACK, self.WIN, indentation, text_topleft + (2 * line_spacing))
             self.draw_text("After three infections, the game is lost.",
                            self.font_very_small, BLACK, self.WIN, indentation, text_topleft + (3 * line_spacing))
