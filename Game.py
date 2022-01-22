@@ -12,9 +12,6 @@ from Runner import Runner  # from filename import className
 from Virus import Virus  # from filename import className
 from Health import Health1, Health2, Health3
 
-FPS = 60
-FramePerSec = pygame.time.Clock()
-
 
 class Game:
     # game is created only once, and it is running as long as the application is open. Variables are initialized/reset in the new() method for each time playing
@@ -103,7 +100,7 @@ class Game:
         self.run()
 
     def run(self):  # code that handles main game loop in pygame
-        MUSIC.play(loops=-1)  # play in endless loop TODO: why -1?
+        MUSIC.play(loops=-1)  # play in endless loop (-1 = endless)
         while self.playing:  # game loop: open & close the window
             self.clock.tick(FPS)  # controls speed of the while loop
             self.events()
