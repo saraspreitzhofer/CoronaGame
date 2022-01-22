@@ -30,7 +30,7 @@ class Game:
         self.all_sprites = pygame.sprite.Group()  # creates new empty group for all sprites
         self.virus_group = pygame.sprite.Group()
         self.mask_group = pygame.sprite.Group()
-        #self.runner_group = pygame.sprite.Group() # TODO: not necessary
+        # self.runner_group = pygame.sprite.Group() # TODO: not necessary
 
         # runner sprite object
         self.runner = None
@@ -82,7 +82,7 @@ class Game:
         self.all_sprites.add(self.health3)
 
         # protection
-        self.protected = False # default
+        self.protected = False  # default
         self.protection_timer = 0  # default
         self.points = 0
         self.virus_counter = 0
@@ -197,7 +197,8 @@ class Game:
             self.runner.runner_set_protected()  # change runner appearance
             print("you are wearing a mask now")
 
-    def count_points(self):  # count points by collisions between viruses and points_counter sprite at the left border of the screen
+    def count_points(
+            self):  # count points by collisions between viruses and points_counter sprite at the left border of the screen
         if pygame.sprite.spritecollide(self.points_counter, self.virus_group, True):
             self.points += 1
 
@@ -266,6 +267,7 @@ class Menu:
         self.highscore3 = "0"
 
     def run(self):
+        # routine for each screen
         self.click = False
         pygame.display.update()
         self.clock.tick(FPS)
@@ -407,7 +409,7 @@ class Menu:
             pygame.draw.rect(self.WIN, GREY, user_input_box)
             self.draw_text("Ooops! You are dead :/", self.font_big, BLACK, self.WIN, 60, 40)
             self.draw_text("Viruses avoided: " + str(g.points), self.font_small, BLACK,
-                           self.WIN, 250, 130)
+                           self.WIN, 250, 120)
             self.draw_text("Your name: ", self.font_small, BLACK, self.WIN, 150, 250)
             self.draw_text(self.user_name, self.font_small, BLACK, self.WIN, user_input_box.x + MARGIN,
                            user_input_box.y + MARGIN)
@@ -459,14 +461,15 @@ class Menu:
             pygame.draw.rect(self.WIN, GREY, main_menu_button)
             pygame.draw.rect(self.WIN, GREY, quit_button)
             self.draw_text("You are still dead :/", self.font_big, BLACK, self.WIN, 150, 40)
-            self.draw_text("Play again", self.font_small, BLACK, self.WIN, play_again_button.x + MARGIN,
-                           play_again_button.y + MARGIN)
-            self.draw_text("Main Menu", self.font_small, BLACK, self.WIN, main_menu_button.x + MARGIN,
-                           main_menu_button.y + MARGIN)
-            self.draw_text("Quit", self.font_small, BLACK, self.WIN, quit_button.x + MARGIN, quit_button.y + MARGIN)
-
             self.draw_text("Viruses avoided: " + str(g.points), self.font_small, BLACK,
-                           self.WIN, 250, 130)
+                           self.WIN, 250, 120)
+            self.draw_text("Play again", self.font_small, BLACK, self.WIN, play_again_button.x + 2 * MARGIN,
+                           play_again_button.y + MARGIN)
+            self.draw_text("Main Menu", self.font_small, BLACK, self.WIN, main_menu_button.x + 2 * MARGIN,
+                           main_menu_button.y + MARGIN)
+            self.draw_text("Quit", self.font_small, BLACK, self.WIN, quit_button.x + 2 * MARGIN, quit_button.y + MARGIN)
+
+
 
             if play_again_button.collidepoint(mx, my):
                 if self.click:
