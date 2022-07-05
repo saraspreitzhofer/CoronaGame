@@ -1,7 +1,6 @@
 import pygame
 import os  # to define path to the images
 from settings import *
-import Game
 
 
 class Runner(pygame.sprite.Sprite):  # Runner is a pygame Sprite object (Vererbung / Interface)
